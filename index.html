@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="Reptéri Transzfer" content="Reptéri transzfer,Taxi szolgáltatás, " />
+        <title>Reptéri Transzfer</title>
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+        />
+        <link href="https://fonts.googleapis.com/css?family=Muli&display=swap" rel="stylesheet" />
+        <script src="https://kit.fontawesome.com/592c2a1a3c.js" crossorigin="anonymous"></script>
+        <style>
+            body {
+                background: linear-gradient(180deg, rgba(90, 207, 255, 1) 55%, rgba(255, 255, 255, 1) 100%);
+                height: 100vh;
+                margin: 0;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+ 
+            .header-img {
+                width: 13vw;
+                height: auto;
+            }
+ 
+            .side-photo {
+                width: 35vw;
+                margin-left: -10vw;
+            }
+ 
+            * {
+                font-family: 'Muli';
+            }
+
+            h1 {
+                font-weight: bold;
+            }
+ 
+            p #fejlec {
+                font-size: 25px;
+                color: #000;
+                text-align: center;
+
+
+            }
+
+            p {
+                font-size: 22px;
+                color: #000;
+                text-align: justify;
+            }
+ 
+            .footer {
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+                background-color: gray;
+                height: 40px;
+                align-items: center;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                left: 0;
+            }
+ 
+            .footer i {
+                padding-right: 10px;
+            }
+ 
+            .footer a {
+                color: white;
+                font-size: 20px;
+                line-height: 40px;
+            }
+ 
+            .contact {
+                display: flex;
+                justify-content: space-between;
+            }
+            /* @media screen and (max-width: 575px) */
+            @media only screen 
+and (min-device-width: 375px) 
+and (max-device-width: 667px) 
+and (-webkit-min-device-pixel-ratio: 2) {
+            
+                h1 {
+                    font-size: 3rem;
+                }
+
+                .header-img {
+                    width: 150px;
+                    height: auto;
+                }
+ 
+                p {
+                    padding-top: 0;
+                    font-size: 2rem;
+                }
+ 
+                .footer {
+                    height: 90px;
+                    margin-top: 20px;
+                }
+ 
+                .footer a {
+                    font-size: 14px;
+                    line-height: 28px;
+                }
+ 
+                .contact {
+                    flex-direction: column;
+                    align-items: center;
+                    height: auto;
+                }
+                .side-photo {
+                    width: 45vw !important;
+                    margin-left: -10vw;
+                }  
+            }
+
+            @media screen and (max-width: 1500px) and (min-width: 576px) {
+                .side-photo {
+                    width: 25vw;
+                    margin-left: -10vw;
+                }  
+            }
+
+            @media screen and (max-width: 1920px) and (min-width: 1080px) {
+                .side-photo {
+                    width: 25vw;
+                    margin-left: -10vw;
+                }
+            }
+
+        </style>
+    </head>
+    <body>
+        <header class="container">
+            <div class="row pt-4">
+                <div class="col-4 text-left">
+                    <img class="header-img" src="./car_1.png" alt="Reptéri Transzfer" />
+                </div>
+                <div class="col-4 text-center">
+                    <img class="header-img" src="./logo.png" alt="Tatabánya Transzfer" />
+                </div>
+                <div class="col-4 text-right">
+                    <img class="header-img" src="./car_2.png" alt="Taxi Szolgáltatás" />
+                </div>
+            </div>
+        </header>
+        <div class="container" id="fejlec">
+            <div class="row py-4 py-lg-4">    
+                <div class="col-12 text-center">
+                    <h1 class="text-center">
+                        Reptéri transzfer, taxi szolgáltatás
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <main class="container">
+            <div class="row">
+                <div class="d-none d-lg-block col-6">
+                    <img class="side-photo" src="./asd.png" alt="Transzfer Schwechat" />
+                </div>
+                <div class="col-12 col-lg-6 d-flex align-items-center">
+                    <p>
+                        Komárom-Esztergom megye területéről vállalunk reptéri transzfert 8 főig, illetve taxi szolgáltatást.
+                        Megbízható autókkal, kedvező áron, 30 éve balesetmentesen szállítunk. Bármikor bárhová elvisszük, előre
+                        egyeztetett időpontban. Minden út egyedi árképzésű, rugalmasan alkalmazkodva az Ön igényeihez. Kérjen
+                        árajánlatot e-mailben vagy telefonon.
+                    </p>
+                </div>
+                <div class="d-block d-lg-none col-12 d-flex justify-content-center">
+                    <img class="side-photo" src="./asd.png" alt="Transzfer Bécs" />
+                </div>
+            </div>
+        </main>
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="contact col-12">
+                        <a target="__blank" href="https://www.facebook.com/Mandel-Transfer-112481643553395/">
+                            <i class="fab fa-facebook-square"></i>Mandel Transzfer
+                        </a>
+                        <a href="tel:+36203289955"><i class="fas fa-phone-square-alt"></i>+36/20/328 9955 </a>
+                        <a href="mailto:csaba.mandel@gmail.com"><i class="fas fa-envelope"></i></i>csaba.mandel@gmail.com </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
