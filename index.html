@@ -60,7 +60,7 @@
                 background-color: gray;
                 height: 40px;
                 align-items: center;
-                position: absolute;
+                position: fixed;
                 bottom: 0;
                 right: 0;
                 left: 0;
@@ -77,8 +77,6 @@
             }
  
             .contact {
-                position: fixed;
-                bottom: 0;
                 display: flex;
                 justify-content: space-between;
             }
@@ -116,20 +114,21 @@
                     flex-direction: column;
                     align-items: center;
                     height: auto;
+                    font-size: 2em;
                 }
                 .side-photo {
                     width: 45vw !important;
-                    height: auto;
+                    margin: 0 auto;
                 }  
             }
 
-       
+/*        
             @media screen and (min-width: 576px) {
                 .side-photo {
                     width: 25vw;
                     margin-left: -10vw;
                 }  
-            }
+            } */
 
         </style>
     </head>
@@ -169,7 +168,7 @@
                         árajánlatot e-mailben vagy telefonon.
                     </p>
                 </div>
-                <div class="d-block d-lg-none col-12 d-flex justify-content-center">
+                <div class="d-block d-lg-none col-12 d-flex content-center">
                     <img class="side-photo" src="./asd.png" alt="Transzfer Bécs" />
                 </div>
             </div>
