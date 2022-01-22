@@ -1,0 +1,119 @@
+#particles-js {
+  background: rgb(0, 0, 0);
+  height: 100vh;
+  width: 100%;
+  position: fixed;
+}
+
+.particles-js-canvas-el {
+  position: absolute;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.header-img {
+  width: 13vw;
+  height: auto;
+}
+
+.side-photo {
+  width: 30vw;
+  margin-left: -10vw;
+}
+
+h1 {
+  font-family: "Raleway", sans-serif;
+  font-family: "Sedgwick Ave", cursive;
+  font-family: "The Nautigal", cursive;
+  color: rgb(177, 174, 174);
+  padding-top: 1em;
+}
+
+#fejlec {
+  font-size: 25px;
+  color: #000;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+}
+
+p {
+  font-size: 22px;
+  color: #000;
+  text-align: justify;
+  color: white;
+}
+
+.footer {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: gray;
+  height: 40px;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.footer i {
+  padding-right: 10px;
+}
+
+.footer a {
+  color: white;
+  font-size: 20px;
+  line-height: 40px;
+}
+
+.contact {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media only screen and (min-device-width: 360px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+  h1 {
+    font-size: 4rem;
+  }
+
+  .header-img {
+    width: 200px;
+    height: auto;
+  }
+
+  p {
+    padding-top: 0;
+    font-size: 2.4rem;
+  }
+
+  .footer {
+    height: 90px;
+    margin-top: 20px;
+  }
+
+  .footer a {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .contact {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
+  .side-photo {
+    width: 45vw !important;
+    margin-left: -10vw;
+  }
+}
+
+@media screen and (min-width: 576px) {
+  .side-photo {
+    width: 25vw;
+    margin-left: -10vw;
+  }
+}
