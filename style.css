@@ -1,6 +1,6 @@
 #particles-js {
   background: rgb(0, 0, 0);
-  height: 100vh;
+  height: 100%;
   width: 100%;
   position: fixed;
 }
@@ -29,7 +29,8 @@ h1 {
   font-family: "Sedgwick Ave", cursive;
   font-family: "The Nautigal", cursive;
   color: rgb(177, 174, 174);
-  padding-top: 1em;
+  padding-top: 0.5em;
+  font-size: 5rem !important;
 }
 
 #fejlec {
@@ -54,7 +55,7 @@ p {
   background-color: gray;
   height: 40px;
   align-items: center;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   right: 0;
   left: 0;
@@ -73,6 +74,9 @@ p {
 .contact {
   display: flex;
   justify-content: space-between;
+}
+
+/* @media screen {
 }
 
 @media only screen and (min-device-width: 360px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
@@ -115,5 +119,77 @@ p {
   .side-photo {
     width: 25vw;
     margin-left: -10vw;
+  }
+}
+ */
+
+@media (max-width: 976px) {
+  .side-photo {
+    width: 20vw;
+  }
+}
+
+@media (max-width: 785px) {
+  h1 {
+    font-size: 3rem !important;
+  }
+  .side-photo {
+    width: 25vw;
+  }
+
+  .footer a {
+    font-size: 13px;
+    line-height: 18px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 500px) {
+  /*   .footer {
+    flex-direction: column;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .contact {
+    flex-direction: column;
+    display: flex;
+  }
+
+  #first {
+    flex-wrap: wrap;
+    display: flex;
+  }
+
+  #second {
+    flex-wrap: wrap;
+    display: flex;
+  } */
+
+  h1 {
+    font-size: 3rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  p {
+    font-size: 1rem !important;
+  }
+
+  .side-photo {
+    width: 35vw;
+  }
+
+  .footer a {
+    font-size: 10px;
+    line-height: 18px;
+    display: inline;
+  }
+
+  .header-img {
+    width: 200px;
+    height: auto;
   }
 }
