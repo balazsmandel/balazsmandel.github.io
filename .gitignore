@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.superpowers/
+_refs/
+_build/
+_old_site/
+*.log
+.DS_Store
