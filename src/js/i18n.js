@@ -32,10 +32,11 @@ export function applyLang(lang) {
 }
 
 export function detectLang() {
-  // a pre-rendered localized page pins the language
+  // a pre-rendered localized page pins the language (/en/, /de/)
   if (window.__LANG__ && LANGS.includes(window.__LANG__)) return window.__LANG__
+  // remember the visitor's explicit choice
   const saved = localStorage.getItem('lang')
   if (saved && LANGS.includes(saved)) return saved
-  const nav = (navigator.language || 'hu').slice(0, 2)
-  return LANGS.includes(nav) ? nav : 'hu'
+  // default is always Hungarian (not the browser language)
+  return 'hu'
 }
