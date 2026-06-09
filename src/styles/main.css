@@ -25,8 +25,9 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .btn.ghost{border:1px solid rgba(244,241,234,.3);color:var(--text);background:transparent;}
 .btn.ghost:hover{background:rgba(244,241,234,.08);}
 
-/* reveal */
-.reveal{opacity:0;transform:translateY(52px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1);will-change:transform,opacity;}
+/* reveal — modern blur-in + rise */
+.reveal{opacity:0;transform:translateY(46px);
+  transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);will-change:transform,opacity;}
 .reveal.in{opacity:1;transform:none;}
 
 /* ===== NAV ===== */
@@ -53,22 +54,55 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 
 /* ===== HERO ===== */
 .hero{position:relative;height:100vh;min-height:620px;overflow:hidden;display:flex;align-items:flex-end;}
-.hero-bg{position:absolute;inset:-8% 0;z-index:0;background-image:url("/assets/img/hero-night.jpg");
-  background-size:cover;background-position:center 60%;will-change:transform;}
-.hero-overlay{position:absolute;inset:0;z-index:1;
+/* cinematic light beams (inspired by 21st.dev premium hero) */
+.hero-beams{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+.hero-beams span{position:absolute;top:-40%;left:var(--x,20%);width:34vw;height:170%;transform:rotate(16deg);
+  filter:blur(40px);background:radial-gradient(50% 50% at 50% 50%,rgba(231,200,132,.18),transparent 70%);
+  animation:beam 12s ease-in-out infinite;will-change:transform,opacity;}
+.hero-beams span:nth-child(1){--x:4%;animation-delay:0s;}
+.hero-beams span:nth-child(2){--x:44%;width:22vw;background:radial-gradient(50% 50% at 50% 50%,rgba(26,166,176,.16),transparent 70%);animation-delay:-5s;}
+.hero-beams span:nth-child(3){--x:72%;animation-delay:-8s;}
+@keyframes beam{0%,100%{opacity:.3;transform:rotate(16deg) translateX(-7%);}50%{opacity:.85;transform:rotate(16deg) translateX(7%);}}
+
+.hero-glow{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(58% 48% at 16% 92%,rgba(231,200,132,.20),transparent 60%);}
+
+.hero-overlay{position:absolute;inset:0;z-index:2;
   background:linear-gradient(180deg,rgba(8,11,15,.55) 0%,rgba(8,11,15,.12) 30%,rgba(8,11,15,.55) 70%,rgba(8,11,15,.97) 100%),
              radial-gradient(120% 90% at 12% 100%,rgba(8,11,15,.85),transparent 60%);}
-.hero-content{position:relative;z-index:2;padding:0 clamp(20px,5vw,48px) 9vh;max-width:var(--maxw);width:100%;margin:0 auto;}
-.kicker{font-size:13px;letter-spacing:.38em;color:var(--gold);font-weight:600;text-transform:uppercase;margin-bottom:22px;}
+.hero-grain{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+/* A hero videó már tartalmazza a szemcsét/fénysugarakat/glow-ot. Ezek a rétegek
+   feleslegesek, és a .hero-grain mix-blend-mode-ja + a .hero-beams blur-szűrője
+   BEFAGYASZTOTTA a muted hero videót Chrome-ban (t:0.02-nél megállt). Kiiktatva. */
+.hero-beams,.hero-glow,.hero-grain,.hero-overlay{display:none!important;}
+
+.hero-content{position:relative;z-index:4;padding:0 clamp(20px,5vw,48px) 9vh;max-width:var(--maxw);width:100%;margin:0 auto;}
+
+.hero-badge{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border:1px solid var(--border);border-radius:30px;
+  background:rgba(12,17,23,.5);backdrop-filter:blur(10px);font-size:13px;letter-spacing:.03em;color:#e9e4d8;margin-bottom:24px;}
+.dot-live{width:9px;height:9px;border-radius:50%;background:#46e08a;box-shadow:0 0 0 0 rgba(70,224,138,.6);animation:livePulse 2.2s infinite;}
+@keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(70,224,138,.55);}70%{box-shadow:0 0 0 11px rgba(70,224,138,0);}100%{box-shadow:0 0 0 0 rgba(70,224,138,0);}}
+
 .hero h1{font-weight:900;text-transform:uppercase;line-height:.84;letter-spacing:-.03em;font-size:clamp(52px,11vw,168px);}
-.hero h1 .ln{display:block;overflow:hidden;}
-.hero h1 .ln span{display:block;transform:translateY(105%);animation:rise .95s cubic-bezier(.16,1,.3,1) forwards;}
-.hero h1 .ln:nth-child(1) span{animation-delay:.25s;}
-.hero h1 .ln:nth-child(2) span{animation-delay:.4s;}
+.hero h1 .ln{display:block;overflow:hidden;padding-top:.34em;margin-top:-.17em;}
+.hero h1 .ln>span{display:block;transform:translateY(105%);animation:rise .95s cubic-bezier(.16,1,.3,1) forwards;}
+.hero h1 .ln:nth-child(1)>span{animation-delay:.25s;}
+.hero h1 .ln:nth-child(2)>span{animation-delay:.4s;}
 .hero h1 .gold{color:var(--gold);}
+.hero h1 .gold.shimmer{background:linear-gradient(100deg,var(--gold) 30%,#fff4d6 50%,var(--gold) 70%);background-size:220% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;padding-top:.22em;margin-top:-.22em;
+  animation:rise .95s cubic-bezier(.16,1,.3,1) forwards,shimmer 6s linear infinite;animation-delay:.4s,0s;}
+@keyframes shimmer{to{background-position:-220% 0;}}
+
 .hero .sub{margin-top:26px;max-width:540px;color:#d7dade;font-size:clamp(15px,1.7vw,19px);}
 .hero .cta-row{margin-top:30px;display:flex;gap:14px;flex-wrap:wrap;}
-.scrollcue{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:2;font-size:11px;letter-spacing:.3em;
+.hero-trust{display:flex;gap:14px 26px;flex-wrap:wrap;margin-top:28px;}
+.hero-trust>span{display:inline-flex;align-items:center;gap:9px;font-size:13.5px;color:#c7ccd2;}
+.hero-trust svg{width:18px;height:18px;fill:none;stroke:var(--gold);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none;}
+
+.scrollcue{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:4;font-size:11px;letter-spacing:.3em;
   color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:8px;}
 .scrollcue .line{width:1px;height:34px;background:linear-gradient(var(--gold),transparent);animation:drop 1.8s infinite;}
 @keyframes rise{to{transform:translateY(0);}}
@@ -111,8 +145,12 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .fleet-rows{max-width:var(--maxw);margin:0 auto;display:flex;flex-direction:column;gap:clamp(50px,8vw,110px);}
 .car-row{display:grid;grid-template-columns:1.25fr 1fr;align-items:center;gap:clamp(20px,4vw,56px);}
 .car-row.reverse .car-img{order:2;}
-.car-img{perspective:1000px;}
-.car-img img{width:100%;display:block;filter:drop-shadow(0 26px 36px rgba(0,0,0,.55));transition:transform .5s cubic-bezier(.2,.7,.2,1),filter .5s;}
+.car-img{perspective:1000px;position:relative;}
+/* subtle showroom light pool behind the car so glossy-black vehicles read clearly on the dark section */
+.car-img::before{content:"";position:absolute;inset:-12% -8% 2%;z-index:0;pointer-events:none;
+  background:radial-gradient(64% 56% at 50% 42%,rgba(225,232,240,.16),rgba(231,200,132,.07) 38%,transparent 70%);
+  filter:blur(8px);}
+.car-img img{position:relative;z-index:1;width:100%;display:block;filter:drop-shadow(0 26px 36px rgba(0,0,0,.55));transition:transform .5s cubic-bezier(.2,.7,.2,1),filter .5s;}
 .car-img:hover img{transform:translateY(-8px) scale(1.04);filter:drop-shadow(0 40px 60px rgba(0,0,0,.6));}
 .car-img .img-ph{aspect-ratio:1500/950;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);border-radius:18px;color:var(--muted);text-align:center;padding:20px;font-size:14px;background:rgba(255,255,255,.02);}
 .car-info h3{font-weight:900;text-transform:uppercase;font-size:clamp(30px,4.6vw,54px);letter-spacing:-.02em;line-height:.95;}
@@ -239,10 +277,28 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
   .hero h1{font-size:clamp(44px,15vw,72px);}
 }
 
+/* ===== Remotion background videos ===== */
+
+/* Hero: replaces .hero-bg — must be below beams(z1), overlay(z2), grain(z3), content(z4) */
+.hero-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Reduced-motion / no-JS: video sources use data-src and are never loaded by
+   video.js, so the <video poster> image is the static fallback. Intentional —
+   do not add display:none here. */
+
 /* ===== Reduced motion ===== */
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto;}
-  .reveal{opacity:1!important;transform:none!important;}
-  .hero h1 .ln span{transform:none!important;animation:none!important;}
+  .reveal{opacity:1!important;transform:none!important;filter:none!important;}
+  .hero h1 .ln>span{transform:none!important;animation:none!important;}
   .scrollcue .line{animation:none!important;}
+  .hero-beams span,.dot-live,.hero h1 .gold.shimmer{animation:none!important;}
 }

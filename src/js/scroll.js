@@ -49,6 +49,22 @@ export function initScroll() {
     })
   }
 
+  // --- hero light-beams counter-parallax + content drift/fade on scroll ---
+  const beams = gsap.utils.toArray('.hero-beams span')
+  if (beams.length) {
+    gsap.to(beams, {
+      yPercent: -22, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+    })
+  }
+  // --- fleet cars drift on scroll (subtle depth) ---
+  gsap.utils.toArray('.car-img').forEach((ci) => {
+    gsap.fromTo(ci, { yPercent: 7 }, {
+      yPercent: -7, ease: 'none',
+      scrollTrigger: { trigger: ci, start: 'top bottom', end: 'bottom top', scrub: true },
+    })
+  })
+
   // --- divider parallax ---
   const divBg = document.querySelector('.divider-bg')
   if (divBg) {

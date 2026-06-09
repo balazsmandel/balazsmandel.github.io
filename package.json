@@ -6,14 +6,26 @@
     "dev": "vite",
     "build": "vite build && node scripts/build-i18n.mjs",
     "preview": "vite preview",
-    "check:i18n": "node scripts/check-i18n.mjs"
+    "check:i18n": "node scripts/check-i18n.mjs",
+    "video:studio": "remotion studio",
+    "video:render:all": "node scripts/render-videos.mjs"
   },
   "devDependencies": {
+    "@remotion/eslint-config": "^4.0.474",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^25.1.0",
+    "typescript": "^6.0.3",
     "vite": "^5.4.0"
   },
   "dependencies": {
+    "@remotion/cli": "^4.0.474",
     "gsap": "^3.12.5",
     "lenis": "^1.1.13",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "remotion": "^4.0.474",
     "three": "^0.169.0"
   }
 }

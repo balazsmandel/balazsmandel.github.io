@@ -1,6 +1,7 @@
 import '../styles/main.css'
 import { applyLang, detectLang, FLAG } from './i18n.js'
 import { initScroll } from './scroll.js'
+import { initVideos } from './video.js'
 
 // ---------- language ----------
 let lang = detectLang()
@@ -87,6 +88,20 @@ if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     })
   })
 }
+
+// ---------- magnetic buttons (desktop pointers only) ----------
+if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  document.querySelectorAll('.magnetic').forEach((el) => {
+    el.addEventListener('mousemove', (e) => {
+      const b = el.getBoundingClientRect()
+      el.style.transform = `translate(${(e.clientX - b.left - b.width / 2) * 0.25}px, ${(e.clientY - b.top - b.height / 2) * 0.4}px)`
+    })
+    el.addEventListener('mouseleave', () => { el.style.transform = '' })
+  })
+}
+
+// ---------- background videos ----------
+initVideos()
 
 // ---------- scroll choreography ----------
 initScroll()

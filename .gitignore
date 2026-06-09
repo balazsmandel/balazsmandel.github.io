@@ -6,3 +6,7 @@ _build/
 _old_site/
 *.log
 .DS_Store
+
+# Remotion
+out/
+.remotion/
