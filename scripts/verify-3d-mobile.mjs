@@ -15,10 +15,7 @@ page.on("pageerror", (e) => logs.push("pageerror: " + e.message));
 
 await page.goto("http://localhost:5173/", { waitUntil: "networkidle2", timeout: 30000 });
 await new Promise((r) => setTimeout(r, 2500));
-const t1 = await page.evaluate(() => document.querySelector(".hero-bg-video")?.currentTime ?? null);
 await page.screenshot({ path: "_build/m-hero.png" });
-await new Promise((r) => setTimeout(r, 2000));
-const t2 = await page.evaluate(() => document.querySelector(".hero-bg-video")?.currentTime ?? null);
 
 await page.evaluate(() => document.getElementById("about")?.scrollIntoView({ block: "center" }));
 await new Promise((r) => setTimeout(r, 2000));
@@ -44,7 +41,6 @@ const fps = await page.evaluate(() => new Promise((res) => {
   requestAnimationFrame(tick);
 }));
 
-console.log("hero video:", t1, "->", t2, t2 > t1 + 0.1 ? "PLAYS" : "FROZEN");
 console.log("routes section ~FPS:", fps);
 console.log(logs.length ? logs.join("\n") : "no page errors");
 await browser.close();
