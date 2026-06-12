@@ -18,6 +18,14 @@ export function initHeroFX(hero) {
   initJourney(hero)
   initKineticType(hero)
 
+  // --- optional foreground car (shows up once the asset exists) ---
+  const car2 = hero.querySelector('.hero-car2')
+  if (car2) {
+    const img = car2.querySelector('.hc2-img')
+    const show = () => { if (img.naturalWidth > 0) car2.hidden = false }
+    img.complete ? show() : img.addEventListener('load', show)
+  }
+
   // --- content tilt + scroll exit ---
   const content = hero.querySelector('.hero-content')
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches
@@ -44,6 +52,11 @@ export function initHeroFX(hero) {
         `perspective(1100px) rotateY(${(mx * 2.5).toFixed(3)}deg) rotateX(${(-my * 1.8).toFixed(3)}deg)` +
         ` translateY(${(-scrollP * 130).toFixed(1)}px)`
       content.style.opacity = String(Math.max(0, 1 - scrollP * 1.25))
+    }
+    if (car2 && !car2.hidden) {
+      // drifts against the content = depth, sinks a touch on scroll
+      car2.style.transform =
+        `translate(${(-mx * 18).toFixed(1)}px, ${(-my * 10 + scrollP * 60).toFixed(1)}px)`
     }
   }
   function setRunning(on) {
