@@ -102,6 +102,23 @@ if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
 // ---------- scroll choreography ----------
 initScroll()
 
+// ---------- brand: periodic 3D letter roll (hover also triggers via CSS) ----------
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.brand').forEach((b) => {
+    setInterval(() => {
+      if (b.matches(':hover')) return
+      b.classList.add('roll')
+      setTimeout(() => {
+        // reset without the reverse-roll transition
+        b.classList.add('snap')
+        b.classList.remove('roll')
+        void b.offsetWidth
+        b.classList.remove('snap')
+      }, 1300)
+    }, 15000)
+  })
+}
+
 // ---------- 3D / motion layers (lazy: three.js only loads when needed) ----------
 const hero = document.querySelector('.hero')
 if (hero) import('./fx/hero3d.js').then((m) => m.initHeroFX(hero))
