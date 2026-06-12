@@ -78,26 +78,31 @@
 
   <!-- HERO -->
   <header class="hero" id="top">
-    <video class="hero-bg-video" data-bg autoplay muted loop playsinline preload="auto" poster="/assets/img/hero-night.jpg" aria-hidden="true">
-      <source data-src="/assets/video/hero-loop.mp4?v=6" type="video/mp4" />
-    </video>
-    <canvas id="hero3d" class="hero-3d" aria-hidden="true"></canvas>
+    <div class="hero-bg2" aria-hidden="true"></div>
+    <div class="hero-lights" aria-hidden="true"></div>
+    <canvas class="hero-drive" aria-hidden="true"></canvas>
+    <div class="hero-grain2" aria-hidden="true"></div>
+    <div class="hero-car" aria-hidden="true">
+      <img class="hero-car-img" src="/assets/img/merci.png?v=9" alt="" fetchpriority="high" />
+      <img class="hero-car-reflect" src="/assets/img/merci.png?v=9" alt="" />
+      <div class="hero-car-sweep"></div>
+    </div>
     <!-- journey story: car picks the passenger up at home → airport → takeoff -->
     <svg class="hero-journey" viewBox="0 0 1440 810" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <path class="hj-road" d="M 862 690 C 980 668, 1050 645, 1120 620 S 1280 570, 1330 554" />
-      <path class="hj-sky" d="M 1340 540 C 1180 430, 960 310, 740 258 S 300 165, 40 118" />
-      <path class="hj-trailglow" d="M 1340 540 C 1180 430, 960 310, 740 258 S 300 165, 40 118" />
-      <path class="hj-trail" d="M 1340 540 C 1180 430, 960 310, 740 258 S 300 165, 40 118" />
-      <g class="hj-house" transform="translate(836,664)">
+      <path class="hj-road" d="M 96 742 C 360 756, 720 760, 1010 746 S 1290 714, 1352 694" />
+      <path class="hj-sky" d="M 1382 658 C 1290 470, 1130 330, 930 252 S 470 142, 110 100" />
+      <path class="hj-trailglow" d="M 1382 658 C 1290 470, 1130 330, 930 252 S 470 142, 110 100" />
+      <path class="hj-trail" d="M 1382 658 C 1290 470, 1130 330, 930 252 S 470 142, 110 100" />
+      <g class="hj-house" transform="translate(60,714)">
         <path d="M-13 24 V6 L0 -5 L13 6 V24 Z" />
         <path d="M-4 24 V12 h8 v12" />
       </g>
-      <g class="hj-airport" transform="translate(1356,532)">
+      <g class="hj-airport" transform="translate(1376,666)">
         <path d="M-5 20 V0 h10 v20 M-9 0 h18 l-4 -10 h-10 Z" />
         <path d="M0 -10 V-17" />
         <circle class="hj-beacon" cx="0" cy="-19" r="2.4" />
       </g>
-      <circle class="hj-pax" cx="842" cy="684" r="4" />
+      <circle class="hj-pax" cx="66" cy="734" r="4" />
       <g class="hj-car" opacity="0">
         <path class="hj-beam" d="M27 -4 L56 -1 L56 6 L27 3 Z" />
         <path class="hj-body" d="M-27 4 H-20 a5.2 5.2 0 0 0 10.4 0 H9 a5.2 5.2 0 0 0 10.4 0 H26 V-1 Q26 -6 18 -7 L10 -8 L4 -14 H-11 L-19 -8 Q-27 -7 -27 -1 Z" />
@@ -111,10 +116,6 @@
         <path class="hj-plane-body" d="M15 0 C14 -1.4 12 -1.8 10 -1.8 L4.5 -1.8 L-1.5 -10.5 L-5.5 -10.5 L-3 -1.8 L-8.5 -1.8 L-11 -5.2 L-13.5 -5.2 L-12.2 -0.9 L-12.2 0.9 L-13.5 5.2 L-11 5.2 L-8.5 1.8 L-3 1.8 L-5.5 10.5 L-1.5 10.5 L4.5 1.8 L10 1.8 C12 1.8 14 1.4 15 0 Z" />
       </g>
     </svg>
-    <div class="hero-beams" aria-hidden="true"><span></span><span></span><span></span></div>
-    <div class="hero-glow" aria-hidden="true"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-grain" aria-hidden="true"></div>
     <div class="hero-content">
       <div class="hero-badge reveal"><span class="dot-live"></span><span data-i18n="hero_badge">Most is foglalható · 0–24 elérhető</span></div>
       <h1 class="display">

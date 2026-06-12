@@ -1,7 +1,6 @@
 import '../styles/main.css'
 import { applyLang, detectLang, FLAG } from './i18n.js'
 import { initScroll } from './scroll.js'
-import { initVideos } from './video.js'
 
 // ---------- language ----------
 let lang = detectLang()
@@ -100,15 +99,12 @@ if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
   })
 }
 
-// ---------- background videos ----------
-initVideos()
-
 // ---------- scroll choreography ----------
 initScroll()
 
-// ---------- 3D layers (lazy: three.js only loads when needed) ----------
-const heroCanvas = document.getElementById('hero3d')
-if (heroCanvas) import('./fx/hero3d.js').then((m) => m.initHero3D(heroCanvas))
+// ---------- 3D / motion layers (lazy: three.js only loads when needed) ----------
+const hero = document.querySelector('.hero')
+if (hero) import('./fx/hero3d.js').then((m) => m.initHeroFX(hero))
 
 const routesEl = document.getElementById('routes3d')
 if (routesEl) {

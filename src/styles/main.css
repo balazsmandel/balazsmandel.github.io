@@ -59,31 +59,44 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .cta:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(231,200,132,.42);}
 .burger{display:none;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;}
 
-/* ===== HERO ===== */
-.hero{position:relative;height:100vh;min-height:620px;overflow:hidden;display:flex;align-items:flex-end;}
-/* cinematic light beams (inspired by 21st.dev premium hero) */
-.hero-beams{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
-.hero-beams span{position:absolute;top:-40%;left:var(--x,20%);width:34vw;height:170%;transform:rotate(16deg);
-  filter:blur(40px);background:radial-gradient(50% 50% at 50% 50%,rgba(231,200,132,.18),transparent 70%);
-  animation:beam 12s ease-in-out infinite;will-change:transform,opacity;}
-.hero-beams span:nth-child(1){--x:4%;animation-delay:0s;}
-.hero-beams span:nth-child(2){--x:44%;width:22vw;background:radial-gradient(50% 50% at 50% 50%,rgba(26,166,176,.16),transparent 70%);animation-delay:-5s;}
-.hero-beams span:nth-child(3){--x:72%;animation-delay:-8s;}
-@keyframes beam{0%,100%{opacity:.3;transform:rotate(16deg) translateX(-7%);}50%{opacity:.85;transform:rotate(16deg) translateX(7%);}}
-
-.hero-glow{position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(58% 48% at 16% 92%,rgba(231,200,132,.20),transparent 60%);}
-
-.hero-overlay{position:absolute;inset:0;z-index:2;
-  background:linear-gradient(180deg,rgba(8,11,15,.55) 0%,rgba(8,11,15,.12) 30%,rgba(8,11,15,.55) 70%,rgba(8,11,15,.97) 100%),
-             radial-gradient(120% 90% at 12% 100%,rgba(8,11,15,.85),transparent 60%);}
-.hero-grain{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.05;
+/* ===== HERO — night showroom (no video: art-directed layers + light sweep) ===== */
+.hero{position:relative;height:100vh;min-height:620px;overflow:hidden;display:flex;align-items:flex-end;background:#05070b;}
+.hero-bg2{position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(75% 55% at 72% 26%,rgba(24,42,60,.6),transparent 62%),
+    radial-gradient(70% 32% at 60% 63%,rgba(231,200,132,.2),transparent 70%),
+    radial-gradient(42% 26% at 18% 80%,rgba(26,166,176,.07),transparent 70%),
+    linear-gradient(180deg,#04060a 0%,#0a0f16 52%,#05070b 100%);}
+/* runway light rows at the horizon */
+.hero-lights{position:absolute;left:0;right:0;top:62%;height:3px;z-index:1;pointer-events:none;opacity:.55;
+  background:repeating-linear-gradient(90deg,rgba(231,200,132,.8) 0 4px,transparent 4px 64px);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 22% 78%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 22% 78%,transparent);}
+.hero-lights::before{content:"";position:absolute;left:0;right:0;top:-3px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(231,200,132,.3) 30% 70%,transparent);}
+.hero-lights::after{content:"";position:absolute;left:6%;right:6%;top:10px;height:2px;opacity:.4;
+  background:repeating-linear-gradient(90deg,rgba(231,200,132,.7) 0 3px,transparent 3px 38px);}
+.hero-drive{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
+.hero-grain2{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.05;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 
-/* A hero videó már tartalmazza a szemcsét/fénysugarakat/glow-ot. Ezek a rétegek
-   feleslegesek, és a .hero-grain mix-blend-mode-ja + a .hero-beams blur-szűrője
-   BEFAGYASZTOTTA a muted hero videót Chrome-ban (t:0.02-nél megállt). Kiiktatva. */
-.hero-beams,.hero-glow,.hero-grain,.hero-overlay{display:none!important;}
+/* the S-Class: cutout + mirror floor + travelling light sweep (the eye-catcher) */
+.hero-car{position:absolute;right:max(-40px,-3vw);bottom:7vh;width:min(56vw,940px);z-index:2;pointer-events:none;
+  will-change:transform;}
+.hero-car::before{content:"";position:absolute;left:6%;right:6%;bottom:-4%;height:22%;z-index:0;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(231,200,132,.22),transparent 70%);filter:blur(10px);}
+.hero-car-img{position:relative;z-index:1;width:100%;filter:drop-shadow(0 34px 60px rgba(0,0,0,.7));}
+.hero-car-reflect{position:absolute;top:97%;left:0;width:100%;z-index:0;transform:scaleY(-1);opacity:.16;
+  filter:blur(7px) brightness(.55) saturate(.8);
+  -webkit-mask-image:linear-gradient(180deg,transparent 42%,rgba(0,0,0,.9) 100%);
+  mask-image:linear-gradient(180deg,transparent 42%,rgba(0,0,0,.9) 100%);}
+.hero-car-sweep{position:absolute;inset:0;z-index:2;
+  background:linear-gradient(115deg,transparent 32%,rgba(255,244,214,.22) 45%,rgba(255,255,255,.4) 50%,rgba(255,244,214,.22) 55%,transparent 68%);
+  background-size:280% 100%;background-repeat:no-repeat;
+  -webkit-mask-image:url("/assets/img/merci.png?v=9");-webkit-mask-size:100% 100%;
+  mask-image:url("/assets/img/merci.png?v=9");mask-size:100% 100%;
+  animation:carSweep 7.5s ease-in-out infinite;}
+@keyframes carSweep{0%,16%{background-position:135% 0;}58%,100%{background-position:-95% 0;}}
 
 .hero-content{position:relative;z-index:4;padding:0 clamp(20px,5vw,48px) 9vh;max-width:var(--maxw);width:100%;margin:0 auto;}
 
@@ -270,6 +283,10 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
   .scrollcue{display:none;}
   .hero{align-items:center;}
   .hero-content{padding-bottom:7vh;}
+  /* mobile: the S-Class becomes a moody backdrop behind the centered content */
+  .hero-car{right:-30vw;bottom:auto;top:7vh;width:132vw;opacity:.5;}
+  .hero-car-reflect{display:none;}
+  .hero-lights{top:54%;}
 }
 @media (max-width:860px){
   .fleet-stage .sec-head.over{top:6vh;}
@@ -284,29 +301,8 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
   .hero h1{font-size:clamp(44px,15vw,72px);}
 }
 
-/* ===== Remotion background videos ===== */
-
-/* Hero: replaces .hero-bg — must be below beams(z1), overlay(z2), grain(z3), content(z4) */
-.hero-bg-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-  pointer-events: none;
-}
-
-/* Reduced-motion / no-JS: video sources use data-src and are never loaded by
-   video.js, so the <video poster> image is the static fallback. Intentional —
-   do not add display:none here. */
-
 /* ===== 3D layers ===== */
 
-/* hero light-dust canvas — between video (z0) and content (z4); MUST stay
-   free of CSS filters / blend modes (those froze the hero video in Chrome) */
-.hero-3d{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
-.hero-bg-video{will-change:transform;}
 .hero-content{transform-style:preserve-3d;will-change:transform,opacity;}
 .hero h1{transform:translateZ(46px);}
 
@@ -393,7 +389,7 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
   .reveal{opacity:1!important;transform:none!important;filter:none!important;}
   .hero h1 .ln>span{transform:none!important;animation:none!important;}
   .scrollcue .line{animation:none!important;}
-  .hero-beams span,.dot-live,.hero h1 .gold.shimmer{animation:none!important;}
+  .dot-live,.hero h1 .gold.shimmer{animation:none!important;}
   .hero-journey{display:none!important;}
-  .card::before,.quote-form::before,.brand .brand-plane,.hj-beacon{animation:none!important;}
+  .card::before,.quote-form::before,.brand .brand-plane,.hj-beacon,.hero-car-sweep{animation:none!important;}
 }
