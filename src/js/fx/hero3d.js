@@ -175,6 +175,18 @@ function initKineticType(hero) {
     }
 
     sctx.globalCompositeOperation = 'lighter'
+    // constant lift so the letters are ALWAYS vivid (the headlight only adds)
+    const lift = sctx.createLinearGradient(0, 0, 0, H)
+    lift.addColorStop(0, 'rgba(90,120,160,.12)')
+    lift.addColorStop(0.6, 'rgba(231,200,132,.16)')
+    lift.addColorStop(1, 'rgba(231,200,132,.24)')
+    sctx.fillStyle = lift
+    sctx.fillRect(0, 0, W, H)
+    const cg = sctx.createRadialGradient(W * 0.5, H * 0.46, 0, W * 0.5, H * 0.46, W * 0.5)
+    cg.addColorStop(0, 'rgba(255,244,214,.18)')
+    cg.addColorStop(1, 'rgba(0,0,0,0)')
+    sctx.fillStyle = cg
+    sctx.fillRect(0, 0, W, H)
     for (const b of bokeh) {
       b.x += (b.v * dt) / W
       if (b.x > 1.1) b.x = -0.1
@@ -206,8 +218,8 @@ function initKineticType(hero) {
     ly += (lty - ly) * 0.07
     const R = Math.max(W, H) * 0.24
     const hl = sctx.createRadialGradient(lx * W, ly * H, 0, lx * W, ly * H, R)
-    hl.addColorStop(0, 'rgba(255,244,214,.5)')
-    hl.addColorStop(0.5, 'rgba(231,200,132,.2)')
+    hl.addColorStop(0, 'rgba(255,244,214,.3)')
+    hl.addColorStop(0.5, 'rgba(231,200,132,.12)')
     hl.addColorStop(1, 'rgba(0,0,0,0)')
     sctx.fillStyle = hl
     sctx.fillRect(lx * W - R, ly * H - R, R * 2, R * 2)
@@ -235,8 +247,8 @@ function initKineticType(hero) {
       const y = r.top - hr.top
       mctx.fillStyle = '#fff'
       mctx.fillText(txt, x, y)
-      kctx.strokeStyle = 'rgba(231,200,132,.4)'
-      kctx.lineWidth = 1
+      kctx.strokeStyle = 'rgba(231,200,132,.7)'
+      kctx.lineWidth = 1.4
       kctx.strokeText(txt, x, y)
     })
   }
@@ -284,7 +296,7 @@ function initKineticType(hero) {
     ctx.globalAlpha = intro.p
     const rise = (1 - intro.p) * H * 0.05
     ctx.drawImage(maskedC, 0, rise, W, H)
-    ctx.globalAlpha = 0.55 * intro.p
+    ctx.globalAlpha = 0.85 * intro.p
     ctx.drawImage(strokeC, 0, rise, W, H)
     ctx.globalAlpha = 1
   }
