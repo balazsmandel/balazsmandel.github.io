@@ -1,7 +1,6 @@
 import '../styles/main.css'
 import { applyLang, detectLang, FLAG } from './i18n.js'
 import { initScroll } from './scroll.js'
-import { initVideos } from './video.js'
 
 // ---------- language ----------
 let lang = detectLang()
@@ -68,9 +67,9 @@ document.querySelectorAll('a[href^="tel:"]').forEach((a) =>
 document.querySelectorAll('a[href*="wa.me"]').forEach((a) =>
   a.addEventListener('click', () => window.gtag?.('event', 'whatsapp_click')))
 
-// ---------- service card 3D tilt (desktop pointers only) ----------
+// ---------- card 3D tilt (services + prices, desktop pointers only) ----------
 if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  document.querySelectorAll('.card').forEach((card) => {
+  document.querySelectorAll('.card, .price').forEach((card) => {
     card.addEventListener('mouseenter', () => { card.style.transition = 'transform .1s ease-out, box-shadow .25s, border-color .25s' })
     card.addEventListener('mousemove', (e) => {
       const b = card.getBoundingClientRect()
@@ -100,8 +99,50 @@ if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
   })
 }
 
-// ---------- background videos ----------
-initVideos()
-
 // ---------- scroll choreography ----------
 initScroll()
+
+// ---------- brand: periodic 3D letter roll (hover also triggers via CSS) ----------
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.querySelectorAll('.brand').forEach((b) => {
+    setInterval(() => {
+      if (b.matches(':hover')) return
+      b.classList.add('roll')
+      setTimeout(() => {
+        // reset without the reverse-roll transition
+        b.classList.add('snap')
+        b.classList.remove('roll')
+        void b.offsetWidth
+        b.classList.remove('snap')
+      }, 1300)
+    }, 15000)
+  })
+}
+
+// ---------- 3D / motion layers (lazy: three.js only loads when needed) ----------
+const hero = document.querySelector('.hero')
+if (hero) import('./fx/hero3d.js').then((m) => m.initHeroFX(hero))
+
+const routesEl = document.getElementById('routes3d')
+if (routesEl) {
+  const io = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      io.disconnect()
+      import('./fx/routes3d.js').then((m) => m.initRoutes3D(routesEl))
+    }
+  }, { rootMargin: '600px' })
+  io.observe(routesEl)
+}
+
+const warpCanvas = document.getElementById('warp')
+if (warpCanvas) {
+  const io = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      io.disconnect()
+      import('./fx/warp.js').then((m) => m.initWarp(warpCanvas))
+    }
+  }, { rootMargin: '600px' })
+  io.observe(warpCanvas)
+}
+
+import('./fx/fleetfx.js').then((m) => m.initFleetFX())

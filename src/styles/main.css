@@ -25,17 +25,38 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .btn.ghost{border:1px solid rgba(244,241,234,.3);color:var(--text);background:transparent;}
 .btn.ghost:hover{background:rgba(244,241,234,.08);}
 
-/* reveal — modern blur-in + rise */
-.reveal{opacity:0;transform:translateY(46px);
+/* reveal — rise with a subtle 3D tip-in (perspective baked into the transform) */
+.reveal{opacity:0;transform:perspective(900px) translateY(46px) rotateX(7deg);transform-origin:50% 100%;
   transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);will-change:transform,opacity;}
-.reveal.in{opacity:1;transform:none;}
+.reveal.in{opacity:1;transform:perspective(900px) translateY(0) rotateX(0);}
 
 /* ===== NAV ===== */
 .nav{position:fixed;inset:0 0 auto 0;z-index:100;display:flex;justify-content:space-between;align-items:center;
   padding:20px clamp(20px,5vw,48px);transition:background .4s,padding .4s,border-color .4s;border-bottom:1px solid transparent;}
 .nav.scrolled{background:rgba(8,11,15,.85);backdrop-filter:blur(14px);padding:12px clamp(20px,5vw,48px);border-color:rgba(255,255,255,.06);}
-.brand{font-family:"Archivo";font-weight:900;font-size:20px;letter-spacing:1px;text-decoration:none;display:inline-flex;align-items:baseline;}
-.brand .dot{color:var(--gold);}
+.brand{font-family:"Archivo";font-weight:900;font-size:20px;letter-spacing:1px;text-decoration:none;display:inline-flex;align-items:baseline;
+  color:#f4f1ea;transform-style:preserve-3d;animation:brandSway 7s ease-in-out infinite;will-change:transform;}
+@keyframes brandSway{0%,100%{transform:perspective(320px) rotateY(-8deg) rotateX(2deg);}
+  50%{transform:perspective(320px) rotateY(8deg) rotateX(-2.5deg);}}
+/* letters: gold-extruded 3D glyphs that roll in a wave on hover */
+.brand .bl{display:inline-block;transform-style:preserve-3d;
+  text-shadow:0 1px 0 #b1905c,0 2px 0 #745b2f,0 3px 7px rgba(0,0,0,.5);
+  transition:transform .7s cubic-bezier(.34,1.4,.64,1),color .45s,text-shadow .45s;}
+.brand:hover .bl,.brand.roll .bl{transform:rotateX(-360deg);color:var(--gold2);
+  text-shadow:0 1px 0 #8a6f3a,0 2px 0 #54431f,0 4px 10px rgba(231,200,132,.35);}
+.brand.snap .bl{transition:none!important;}
+.brand .bl:nth-child(1){transition-delay:0ms;}
+.brand .bl:nth-child(2){transition-delay:45ms;}
+.brand .bl:nth-child(3){transition-delay:90ms;}
+.brand .bl:nth-child(4){transition-delay:135ms;}
+.brand .bl:nth-child(5){transition-delay:180ms;}
+.brand .bl:nth-child(6){transition-delay:225ms;}
+.brand .dot{color:var(--gold);transform:translateZ(14px);display:inline-block;}
+.brand small{transform:translateZ(6px);}
+.brand .brand-plane{width:15px;height:15px;fill:var(--gold);margin-left:3px;align-self:center;flex:none;transform:translateZ(20px);
+  animation:planeBob 3.2s ease-in-out infinite;transition:transform .55s cubic-bezier(.34,1.56,.64,1);}
+.brand:hover .brand-plane{transform:translateZ(26px) translate(6px,-7px) rotate(12deg) scale(1.2);}
+@keyframes planeBob{0%,100%{translate:0 0;}50%{translate:0 -2.5px;}}
 .brand small{font-family:"Inter";font-weight:500;font-size:10px;letter-spacing:4px;color:var(--muted);margin-left:8px;text-transform:uppercase;}
 .navlinks{display:flex;align-items:center;gap:28px;}
 .navlinks>a:not(.cta){color:var(--text);opacity:.82;text-decoration:none;font-size:14px;font-weight:500;transition:opacity .2s;}
@@ -52,40 +73,66 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .cta:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(231,200,132,.42);}
 .burger{display:none;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;}
 
-/* ===== HERO ===== */
-.hero{position:relative;height:100vh;min-height:620px;overflow:hidden;display:flex;align-items:flex-end;}
-/* cinematic light beams (inspired by 21st.dev premium hero) */
-.hero-beams{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
-.hero-beams span{position:absolute;top:-40%;left:var(--x,20%);width:34vw;height:170%;transform:rotate(16deg);
-  filter:blur(40px);background:radial-gradient(50% 50% at 50% 50%,rgba(231,200,132,.18),transparent 70%);
-  animation:beam 12s ease-in-out infinite;will-change:transform,opacity;}
-.hero-beams span:nth-child(1){--x:4%;animation-delay:0s;}
-.hero-beams span:nth-child(2){--x:44%;width:22vw;background:radial-gradient(50% 50% at 50% 50%,rgba(26,166,176,.16),transparent 70%);animation-delay:-5s;}
-.hero-beams span:nth-child(3){--x:72%;animation-delay:-8s;}
-@keyframes beam{0%,100%{opacity:.3;transform:rotate(16deg) translateX(-7%);}50%{opacity:.85;transform:rotate(16deg) translateX(7%);}}
-
-.hero-glow{position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:radial-gradient(58% 48% at 16% 92%,rgba(231,200,132,.20),transparent 60%);}
-
-.hero-overlay{position:absolute;inset:0;z-index:2;
-  background:linear-gradient(180deg,rgba(8,11,15,.55) 0%,rgba(8,11,15,.12) 30%,rgba(8,11,15,.55) 70%,rgba(8,11,15,.97) 100%),
-             radial-gradient(120% 90% at 12% 100%,rgba(8,11,15,.85),transparent 60%);}
-.hero-grain{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.05;
+/* ===== HERO — night showroom (no video: art-directed layers + light sweep) ===== */
+/* 100svh: on real phones 100vh includes the collapsed URL bar, which pushed
+   the bottom-anchored car below the first screen */
+.hero{position:relative;height:100vh;height:100svh;min-height:560px;overflow:hidden;display:flex;align-items:center;background:#05070b;}
+.hero-bg2{position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(75% 55% at 72% 26%,rgba(24,42,60,.6),transparent 62%),
+    radial-gradient(70% 32% at 60% 63%,rgba(231,200,132,.2),transparent 70%),
+    radial-gradient(42% 26% at 18% 80%,rgba(26,166,176,.07),transparent 70%),
+    linear-gradient(180deg,#04060a 0%,#0a0f16 52%,#05070b 100%);}
+/* runway light rows at the horizon */
+.hero-lights{position:absolute;left:0;right:0;top:79%;height:3px;z-index:1;pointer-events:none;opacity:.45;
+  background:repeating-linear-gradient(90deg,rgba(231,200,132,.8) 0 4px,transparent 4px 64px);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 22% 78%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 22% 78%,transparent);}
+.hero-lights::before{content:"";position:absolute;left:0;right:0;top:-3px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(231,200,132,.3) 30% 70%,transparent);}
+.hero-lights::after{content:"";position:absolute;left:6%;right:6%;top:10px;height:2px;opacity:.4;
+  background:repeating-linear-gradient(90deg,rgba(231,200,132,.7) 0 3px,transparent 3px 38px);}
+.hero-drive{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
+.hero-grain2{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.05;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 
-/* A hero videó már tartalmazza a szemcsét/fénysugarakat/glow-ot. Ezek a rétegek
-   feleslegesek, és a .hero-grain mix-blend-mode-ja + a .hero-beams blur-szűrője
-   BEFAGYASZTOTTA a muted hero videót Chrome-ban (t:0.02-nél megállt). Kiiktatva. */
-.hero-beams,.hero-glow,.hero-grain,.hero-overlay{display:none!important;}
+/* hero car cutout — parks IN FRONT of the giant type (depth sandwich),
+   behind the content layer so CTAs stay on top */
+.hero-car2{position:absolute;right:1vw;bottom:3vh;width:min(46vw,800px);z-index:3;pointer-events:none;will-change:transform;}
+/* the car is keyed out of its studio backdrop (scripts/key-hero-car.mjs) and
+   sits directly in the hero night; baked floor reflection melts out below */
+.hero-car2::before{content:"";position:absolute;left:10%;right:10%;bottom:6%;height:18%;z-index:0;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(231,200,132,.18),transparent 70%);filter:blur(12px);}
+.hc2-img{position:relative;z-index:1;width:100%;filter:saturate(.92) brightness(.97);
+  -webkit-mask-image:linear-gradient(180deg,#000 76%,rgba(0,0,0,.55) 88%,transparent 99%);
+  mask-image:linear-gradient(180deg,#000 76%,rgba(0,0,0,.55) 88%,transparent 99%);}
+.hc2-reflect{display:none;}
+@media(max-width:860px){
+  /* mobile: car parks centered just above the bottom edge, content above it */
+  .hero-car2{left:50%;right:auto;margin-left:-40vw;width:80vw;bottom:2vh;}
+  .hero .hero-content{padding-bottom:20vh;}
+}
 
-.hero-content{position:relative;z-index:4;padding:0 clamp(20px,5vw,48px) 9vh;max-width:var(--maxw);width:100%;margin:0 auto;}
+/* kinetic type: the canvas paints the headline (letters = windows into the
+   bright night scene); the real DOM h1 stays for SEO/a11y but goes invisible */
+.hero.fx-on h1{color:transparent;line-height:1.06;}
+/* neutralize the rise-animation crop tricks — the canvas doesn't clip, so the
+   lines need honest boxes or the accents of line 2 collide with line 1 */
+.hero.fx-on h1 .ln{overflow:visible;padding-top:0;margin-top:0;}
+.hero.fx-on h1 .ln>span{animation:none!important;transform:none!important;padding-top:0!important;margin-top:0!important;}
+.hero.fx-on h1 .gold.shimmer{background:none;color:transparent;animation:none!important;}
+
+.hero-content{position:relative;z-index:4;padding:0 clamp(20px,5vw,48px) 4vh;max-width:1320px;width:100%;margin:0 auto;text-align:center;}
+.hero .cta-row{justify-content:center;}
+.hero-trust{justify-content:center;}
+.hero .sub{margin-left:auto;margin-right:auto;}
 
 .hero-badge{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border:1px solid var(--border);border-radius:30px;
   background:rgba(12,17,23,.5);backdrop-filter:blur(10px);font-size:13px;letter-spacing:.03em;color:#e9e4d8;margin-bottom:24px;}
 .dot-live{width:9px;height:9px;border-radius:50%;background:#46e08a;box-shadow:0 0 0 0 rgba(70,224,138,.6);animation:livePulse 2.2s infinite;}
 @keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(70,224,138,.55);}70%{box-shadow:0 0 0 11px rgba(70,224,138,0);}100%{box-shadow:0 0 0 0 rgba(70,224,138,0);}}
 
-.hero h1{font-weight:900;text-transform:uppercase;line-height:.84;letter-spacing:-.03em;font-size:clamp(52px,11vw,168px);}
+.hero h1{font-weight:900;text-transform:uppercase;line-height:.86;letter-spacing:-.03em;font-size:clamp(54px,12.2vw,196px);}
 .hero h1 .ln{display:block;overflow:hidden;padding-top:.34em;margin-top:-.17em;}
 .hero h1 .ln>span{display:block;transform:translateY(105%);animation:rise .95s cubic-bezier(.16,1,.3,1) forwards;}
 .hero h1 .ln:nth-child(1)>span{animation-delay:.25s;}
@@ -150,8 +197,8 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .car-img::before{content:"";position:absolute;inset:-12% -8% 2%;z-index:0;pointer-events:none;
   background:radial-gradient(64% 56% at 50% 42%,rgba(225,232,240,.16),rgba(231,200,132,.07) 38%,transparent 70%);
   filter:blur(8px);}
-.car-img img{position:relative;z-index:1;width:100%;display:block;filter:drop-shadow(0 26px 36px rgba(0,0,0,.55));transition:transform .5s cubic-bezier(.2,.7,.2,1),filter .5s;}
-.car-img:hover img{transform:translateY(-8px) scale(1.04);filter:drop-shadow(0 40px 60px rgba(0,0,0,.6));}
+.car-img img:not(.car-reflect){position:relative;z-index:1;width:100%;display:block;filter:drop-shadow(0 26px 36px rgba(0,0,0,.55));transition:transform .5s cubic-bezier(.2,.7,.2,1),filter .5s;}
+.car-img:hover img:not(.car-reflect){transform:translateY(-8px) scale(1.04);filter:drop-shadow(0 40px 60px rgba(0,0,0,.6));}
 .car-img .img-ph{aspect-ratio:1500/950;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);border-radius:18px;color:var(--muted);text-align:center;padding:20px;font-size:14px;background:rgba(255,255,255,.02);}
 .car-info h3{font-weight:900;text-transform:uppercase;font-size:clamp(30px,4.6vw,54px);letter-spacing:-.02em;line-height:.95;}
 .car-desc{color:var(--muted);font-size:16px;line-height:1.5;margin:16px 0 18px;max-width:430px;}
@@ -263,6 +310,7 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
   .scrollcue{display:none;}
   .hero{align-items:center;}
   .hero-content{padding-bottom:7vh;}
+  .hero-lights{top:72%;}
 }
 @media (max-width:860px){
   .fleet-stage .sec-head.over{top:6vh;}
@@ -274,25 +322,90 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 @media (max-width:480px){
   .stats{flex-direction:column;align-items:center;}
   .stat{width:100%;max-width:280px;}
-  .hero h1{font-size:clamp(44px,15vw,72px);}
+  .hero h1{font-size:clamp(38px,12.6vw,58px);}
 }
 
-/* ===== Remotion background videos ===== */
+/* ===== 3D layers ===== */
 
-/* Hero: replaces .hero-bg — must be below beams(z1), overlay(z2), grain(z3), content(z4) */
-.hero-bg-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 0;
-  pointer-events: none;
+.hero-content{transform-style:preserve-3d;will-change:transform,opacity;}
+.hero h1{transform:translateZ(46px);}
+
+/* hero journey story — drawn line-art: house → car → airport → takeoff */
+.hero-journey{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
+.hero-journey .hj-road{stroke:rgba(231,200,132,.42);stroke-width:1.7;
+  stroke-dasharray:1.5 8;stroke-linecap:round;fill:none;}
+/* the sky path only guides the plane/contrail — keep it invisible to avoid clutter */
+.hero-journey .hj-sky{stroke:none;fill:none;}
+.hero-journey .hj-trailglow{stroke:rgba(231,200,132,.26);stroke-width:6;stroke-linecap:round;fill:none;opacity:0;}
+.hero-journey .hj-trail{stroke:#f0d79b;stroke-width:2;stroke-linecap:round;fill:none;opacity:0;}
+.hero-journey .hj-house path,.hero-journey .hj-airport path{stroke:rgba(231,200,132,.9);stroke-width:1.8;
+  fill:none;stroke-linejoin:round;stroke-linecap:round;}
+.hero-journey .hj-beacon{fill:#ff8e6e;animation:beacon 1.6s ease-in-out infinite;}
+@keyframes beacon{0%,100%{opacity:.25;}50%{opacity:1;}}
+.hero-journey .hj-pax{fill:#f0d79b;opacity:0;}
+.hero-journey .hj-car .hj-body,.hero-journey .hj-car .hj-win{stroke:#f0d79b;stroke-width:2;fill:rgba(8,11,15,.35);
+  stroke-linejoin:round;stroke-linecap:round;}
+.hero-journey .hj-car .hj-wheel{stroke:#f0d79b;stroke-width:2;fill:rgba(8,11,15,.55);}
+.hero-journey .hj-car .hj-hub{fill:#e7c884;}
+.hero-journey .hj-car .hj-beam{fill:rgba(255,244,214,.12);}
+.hero-journey .hj-plane-body{fill:#f0d79b;}
+.hero-journey .hj-plane-glow{fill:rgba(231,200,132,.55);}
+.hero-journey .hj-plane-halo{fill:rgba(231,200,132,.16);}
+/* on phones the journey switches to a compact portrait geometry (see hero3d.js) */
+
+/* warp streaks behind the "30 years" divider */
+.warp-canvas{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
+
+/* 3D route map (prices section) */
+.routes3d{position:relative;max-width:var(--maxw);margin:0 auto 46px;height:clamp(340px,46vw,520px);}
+.routes3d canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.routes3d::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 50%,transparent 58%,var(--bg) 96%);}
+.r3d-labels{position:absolute;inset:0;pointer-events:none;}
+.r3d-label{position:absolute;transform:translate(-50%,-130%);display:inline-flex;align-items:center;gap:7px;
+  white-space:nowrap;font-size:12px;letter-spacing:.08em;font-weight:600;color:#dfe4ea;
+  background:rgba(8,11,15,.62);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 12px;
+  backdrop-filter:blur(6px);opacity:0;transition:opacity .4s;z-index:2;}
+.r3d-label i{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px rgba(53,198,208,.8);}
+.r3d-label[data-city="bud"] i{background:var(--gold);box-shadow:0 0 8px rgba(231,200,132,.8);}
+.r3d-label[data-city="bts"] i{background:#d9e2ec;box-shadow:0 0 8px rgba(217,226,236,.8);}
+.r3d-label.origin i{background:var(--gold);box-shadow:0 0 8px rgba(231,200,132,.9);}
+.r3d-label.origin{border-color:rgba(231,200,132,.35);color:var(--gold2);}
+@media (max-width:640px){
+  .routes3d{height:82vw;margin-bottom:30px;}
+  .r3d-label{font-size:10.5px;padding:4px 9px;}
+  /* alternate chips above/below their dots so they don't overlap on narrow screens */
+  .r3d-label[data-city="bts"],.r3d-label[data-city="bud"]{transform:translate(-50%,70%);}
 }
 
-/* Reduced-motion / no-JS: video sources use data-src and are never loaded by
-   video.js, so the <video poster> image is the static fallback. Intentional —
-   do not add display:none here. */
+/* rotating gold border sheen (services cards on hover, quote form always) */
+@property --ang{syntax:'<angle>';initial-value:0deg;inherits:false;}
+@keyframes borderSpin{to{--ang:360deg;}}
+.card{position:relative;}
+.card::before{content:"";position:absolute;inset:-1px;border-radius:21px;padding:1px;pointer-events:none;
+  background:conic-gradient(from var(--ang),transparent 0deg 252deg,rgba(231,200,132,.85) 306deg,transparent 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:borderSpin 5s linear infinite;opacity:0;transition:opacity .45s;}
+.card:hover::before{opacity:1;}
+.card .ico{transform:translateZ(34px);}
+.card h3{transform:translateZ(22px);}
+.quote-form{position:relative;}
+.quote-form::before{content:"";position:absolute;inset:-1px;border-radius:25px;padding:1px;pointer-events:none;
+  background:conic-gradient(from var(--ang),transparent 0deg,rgba(231,200,132,.55) 40deg,transparent 95deg 180deg,rgba(26,166,176,.45) 225deg,transparent 280deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:borderSpin 10s linear infinite;}
+
+/* map attribution (CARTO/OSM tiles baked into the 3D route map) */
+.r3d-attrib{position:absolute;right:8px;bottom:4px;font-size:10px;color:rgba(154,163,173,.55);letter-spacing:.02em;}
+
+/* fleet showroom — 3D stage + mirror floor */
+.car-3d{position:relative;transform-style:preserve-3d;will-change:transform;}
+.car-reflect{position:absolute;top:99%;left:0;width:100%;transform:scaleY(-1);pointer-events:none;
+  opacity:.22;filter:blur(6px) brightness(.55) saturate(.8);
+  -webkit-mask-image:linear-gradient(180deg,transparent 38%,rgba(0,0,0,.85) 100%);
+  mask-image:linear-gradient(180deg,transparent 38%,rgba(0,0,0,.85) 100%);}
 
 /* ===== Reduced motion ===== */
 @media (prefers-reduced-motion: reduce){
@@ -300,5 +413,9 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
   .reveal{opacity:1!important;transform:none!important;filter:none!important;}
   .hero h1 .ln>span{transform:none!important;animation:none!important;}
   .scrollcue .line{animation:none!important;}
-  .hero-beams span,.dot-live,.hero h1 .gold.shimmer{animation:none!important;}
+  .dot-live,.hero h1 .gold.shimmer{animation:none!important;}
+  .hero-journey{display:none!important;}
+  .card::before,.quote-form::before,.brand .brand-plane,.hj-beacon{animation:none!important;}
+  .brand{animation:none!important;transform:none!important;}
+  .brand .bl{transition:none!important;}
 }
