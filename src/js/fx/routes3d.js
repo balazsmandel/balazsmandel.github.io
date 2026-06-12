@@ -109,8 +109,10 @@ export function initRoutes3D(root) {
       if (!CITIES[key]) continue
       v3.copy(CITIES[key]); v3.y += 0.22
       v3.project(camera)
-      el.style.left = ((v3.x * 0.5 + 0.5) * w) + 'px'
-      el.style.top = ((-v3.y * 0.5 + 0.5) * h) + 'px'
+      // clamp into the canvas so edge labels never get cut off
+      const half = el.offsetWidth / 2 + 6
+      el.style.left = Math.max(half, Math.min(w - half, (v3.x * 0.5 + 0.5) * w)) + 'px'
+      el.style.top = Math.max(18, Math.min(h - 10, (-v3.y * 0.5 + 0.5) * h)) + 'px'
       el.style.opacity = v3.z < 1 ? 1 : 0
     }
   }
@@ -123,6 +125,10 @@ export function initRoutes3D(root) {
   function applyCamera() {
     const d = pose.dolly
     camera.position.lerpVectors(FROM.pos, TO.pos, d)
+    // narrow (portrait) viewports need a wider shot so VIE/BUD stay in frame
+    const zoomOut = camera.aspect < 0.9 ? 1.55 : camera.aspect < 1.3 ? 1.2 : 1
+    camera.position.y *= zoomOut
+    camera.position.z *= zoomOut
     camera.position.x += pose.mx * 1.4
     camera.position.y += -pose.my * 0.8
     const look = new THREE.Vector3().lerpVectors(FROM.look, TO.look, d)

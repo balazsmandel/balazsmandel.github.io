@@ -351,7 +351,12 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .r3d-label[data-city="bts"] i{background:#d9e2ec;box-shadow:0 0 8px rgba(217,226,236,.8);}
 .r3d-label.origin i{background:var(--gold);box-shadow:0 0 8px rgba(231,200,132,.9);}
 .r3d-label.origin{border-color:rgba(231,200,132,.35);color:var(--gold2);}
-@media (max-width:640px){.routes3d{height:62vw;margin-bottom:30px;}.r3d-label{font-size:10.5px;padding:4px 9px;}}
+@media (max-width:640px){
+  .routes3d{height:82vw;margin-bottom:30px;}
+  .r3d-label{font-size:10.5px;padding:4px 9px;}
+  /* alternate chips above/below their dots so they don't overlap on narrow screens */
+  .r3d-label[data-city="bts"],.r3d-label[data-city="bud"]{transform:translate(-50%,70%);}
+}
 
 /* rotating gold border sheen (services cards on hover, quote form always) */
 @property --ang{syntax:'<angle>';initial-value:0deg;inherits:false;}
