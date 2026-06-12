@@ -60,7 +60,7 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .burger{display:none;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;}
 
 /* ===== HERO — night showroom (no video: art-directed layers + light sweep) ===== */
-.hero{position:relative;height:100vh;min-height:620px;overflow:hidden;display:flex;align-items:flex-end;background:#05070b;}
+.hero{position:relative;height:100vh;min-height:620px;overflow:hidden;display:flex;align-items:center;background:#05070b;}
 .hero-bg2{position:absolute;inset:0;z-index:0;
   background:
     radial-gradient(75% 55% at 72% 26%,rgba(24,42,60,.6),transparent 62%),
@@ -68,7 +68,7 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
     radial-gradient(42% 26% at 18% 80%,rgba(26,166,176,.07),transparent 70%),
     linear-gradient(180deg,#04060a 0%,#0a0f16 52%,#05070b 100%);}
 /* runway light rows at the horizon */
-.hero-lights{position:absolute;left:0;right:0;top:62%;height:3px;z-index:1;pointer-events:none;opacity:.55;
+.hero-lights{position:absolute;left:0;right:0;top:79%;height:3px;z-index:1;pointer-events:none;opacity:.45;
   background:repeating-linear-gradient(90deg,rgba(231,200,132,.8) 0 4px,transparent 4px 64px);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 22% 78%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 22% 78%,transparent);}
@@ -80,32 +80,23 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .hero-grain2{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.05;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 
-/* the S-Class: cutout + mirror floor + travelling light sweep (the eye-catcher) */
-.hero-car{position:absolute;right:max(-40px,-3vw);bottom:7vh;width:min(56vw,940px);z-index:2;pointer-events:none;
-  will-change:transform;}
-.hero-car::before{content:"";position:absolute;left:6%;right:6%;bottom:-4%;height:22%;z-index:0;
-  background:radial-gradient(50% 50% at 50% 50%,rgba(231,200,132,.22),transparent 70%);filter:blur(10px);}
-.hero-car-img{position:relative;z-index:1;width:100%;filter:drop-shadow(0 34px 60px rgba(0,0,0,.7));}
-.hero-car-reflect{position:absolute;top:97%;left:0;width:100%;z-index:0;transform:scaleY(-1);opacity:.16;
-  filter:blur(7px) brightness(.55) saturate(.8);
-  -webkit-mask-image:linear-gradient(180deg,transparent 42%,rgba(0,0,0,.9) 100%);
-  mask-image:linear-gradient(180deg,transparent 42%,rgba(0,0,0,.9) 100%);}
-.hero-car-sweep{position:absolute;inset:0;z-index:2;
-  background:linear-gradient(115deg,transparent 32%,rgba(255,244,214,.22) 45%,rgba(255,255,255,.4) 50%,rgba(255,244,214,.22) 55%,transparent 68%);
-  background-size:280% 100%;background-repeat:no-repeat;
-  -webkit-mask-image:url("/assets/img/merci.png?v=9");-webkit-mask-size:100% 100%;
-  mask-image:url("/assets/img/merci.png?v=9");mask-size:100% 100%;
-  animation:carSweep 7.5s ease-in-out infinite;}
-@keyframes carSweep{0%,16%{background-position:135% 0;}58%,100%{background-position:-95% 0;}}
+/* kinetic type: the canvas paints the headline (letters = windows into the
+   bright night scene); the real DOM h1 stays for SEO/a11y but goes invisible */
+.hero.fx-on h1{color:transparent;}
+.hero.fx-on h1 .ln>span{animation:none!important;transform:none!important;}
+.hero.fx-on h1 .gold.shimmer{background:none;color:transparent;animation:none!important;}
 
-.hero-content{position:relative;z-index:4;padding:0 clamp(20px,5vw,48px) 9vh;max-width:var(--maxw);width:100%;margin:0 auto;}
+.hero-content{position:relative;z-index:4;padding:0 clamp(20px,5vw,48px) 4vh;max-width:1320px;width:100%;margin:0 auto;text-align:center;}
+.hero .cta-row{justify-content:center;}
+.hero-trust{justify-content:center;}
+.hero .sub{margin-left:auto;margin-right:auto;}
 
 .hero-badge{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border:1px solid var(--border);border-radius:30px;
   background:rgba(12,17,23,.5);backdrop-filter:blur(10px);font-size:13px;letter-spacing:.03em;color:#e9e4d8;margin-bottom:24px;}
 .dot-live{width:9px;height:9px;border-radius:50%;background:#46e08a;box-shadow:0 0 0 0 rgba(70,224,138,.6);animation:livePulse 2.2s infinite;}
 @keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(70,224,138,.55);}70%{box-shadow:0 0 0 11px rgba(70,224,138,0);}100%{box-shadow:0 0 0 0 rgba(70,224,138,0);}}
 
-.hero h1{font-weight:900;text-transform:uppercase;line-height:.84;letter-spacing:-.03em;font-size:clamp(52px,11vw,168px);}
+.hero h1{font-weight:900;text-transform:uppercase;line-height:.86;letter-spacing:-.03em;font-size:clamp(54px,12.2vw,196px);}
 .hero h1 .ln{display:block;overflow:hidden;padding-top:.34em;margin-top:-.17em;}
 .hero h1 .ln>span{display:block;transform:translateY(105%);animation:rise .95s cubic-bezier(.16,1,.3,1) forwards;}
 .hero h1 .ln:nth-child(1)>span{animation-delay:.25s;}
@@ -283,10 +274,7 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
   .scrollcue{display:none;}
   .hero{align-items:center;}
   .hero-content{padding-bottom:7vh;}
-  /* mobile: the S-Class becomes a moody backdrop behind the centered content */
-  .hero-car{right:-30vw;bottom:auto;top:7vh;width:132vw;opacity:.5;}
-  .hero-car-reflect{display:none;}
-  .hero-lights{top:54%;}
+  .hero-lights{top:72%;}
 }
 @media (max-width:860px){
   .fleet-stage .sec-head.over{top:6vh;}
@@ -308,7 +296,7 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 
 /* hero journey story — drawn line-art: house → car → airport → takeoff */
 .hero-journey{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
-.hero-journey .hj-road{stroke:rgba(231,200,132,.3);stroke-width:1.6;
+.hero-journey .hj-road{stroke:rgba(231,200,132,.42);stroke-width:1.7;
   stroke-dasharray:1.5 8;stroke-linecap:round;fill:none;}
 /* the sky path only guides the plane/contrail — keep it invisible to avoid clutter */
 .hero-journey .hj-sky{stroke:none;fill:none;}
@@ -391,5 +379,5 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
   .scrollcue .line{animation:none!important;}
   .dot-live,.hero h1 .gold.shimmer{animation:none!important;}
   .hero-journey{display:none!important;}
-  .card::before,.quote-form::before,.brand .brand-plane,.hj-beacon,.hero-car-sweep{animation:none!important;}
+  .card::before,.quote-form::before,.brand .brand-plane,.hj-beacon{animation:none!important;}
 }
