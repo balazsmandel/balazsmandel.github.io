@@ -10,3 +10,7 @@ _old_site/
 # Remotion
 out/
 .remotion/
+
+# generated-art sources (optimized web versions live in public/assets/img)
+assets/img/bg.png
+assets/img/hypercar.png
