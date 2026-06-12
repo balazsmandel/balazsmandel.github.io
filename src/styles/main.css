@@ -102,11 +102,24 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 /* the car is keyed out of its studio backdrop (scripts/key-hero-car.mjs) and
    sits directly in the hero night; baked floor reflection melts out below */
 .hero-car2::before{content:"";position:absolute;left:10%;right:10%;bottom:6%;height:18%;z-index:0;
-  background:radial-gradient(50% 50% at 50% 50%,rgba(231,200,132,.18),transparent 70%);filter:blur(12px);}
+  background:radial-gradient(50% 50% at 50% 50%,rgba(231,200,132,.18),transparent 70%);filter:blur(12px);
+  animation:carGlow 6s ease-in-out infinite;}
+@keyframes carGlow{0%,100%{opacity:.65;}50%{opacity:1;}}
+/* idle breathing — slow, barely-there scale in sync with the ground glow */
+.hc2-breathe{position:relative;z-index:1;transform-origin:50% 82%;will-change:transform;
+  animation:carBreathe 6s ease-in-out infinite;}
+@keyframes carBreathe{0%,100%{transform:scale(1);}50%{transform:scale(1.02);}}
 .hc2-img{position:relative;z-index:1;width:100%;filter:saturate(.92) brightness(.97);
   -webkit-mask-image:linear-gradient(180deg,#000 76%,rgba(0,0,0,.55) 88%,transparent 99%);
   mask-image:linear-gradient(180deg,#000 76%,rgba(0,0,0,.55) 88%,transparent 99%);}
-.hc2-reflect{display:none;}
+/* travelling light sweep across the body, clipped to the keyed cutout */
+.hc2-sweep{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(115deg,transparent 32%,rgba(255,244,214,.2) 45%,rgba(255,255,255,.38) 50%,rgba(255,244,214,.2) 55%,transparent 68%);
+  background-size:280% 100%;background-repeat:no-repeat;
+  -webkit-mask-image:url("/assets/img/hero-car.png");-webkit-mask-size:100% 100%;
+  mask-image:url("/assets/img/hero-car.png");mask-size:100% 100%;
+  animation:carSweep 9s ease-in-out infinite;}
+@keyframes carSweep{0%,52%{background-position:140% 0;}88%,100%{background-position:-95% 0;}}
 @media(max-width:860px){
   /* mobile: car parks centered just above the bottom edge, content above it */
   .hero-car2{left:50%;right:auto;margin-left:-40vw;width:80vw;bottom:2vh;}
@@ -416,6 +429,7 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
   .dot-live,.hero h1 .gold.shimmer{animation:none!important;}
   .hero-journey{display:none!important;}
   .card::before,.quote-form::before,.brand .brand-plane,.hj-beacon{animation:none!important;}
+  .hc2-breathe,.hc2-sweep,.hero-car2::before{animation:none!important;}
   .brand{animation:none!important;transform:none!important;}
   .brand .bl{transition:none!important;}
 }
