@@ -33,7 +33,7 @@
     "telephone": "+36203289955",
     "email": "csaba.mandel@gmail.com",
     "url": "https://mandeltranszfer.hu/",
-    "areaServed": ["Komárom-Esztergom", "Tatabánya", "Bécs", "Budapest"],
+    "areaServed": ["Komárom-Esztergom", "Tatabánya", "Bécs", "Budapest", "Pozsony"],
     "priceRange": "$$",
     "provider": { "@type": "LocalBusiness", "name": "Mandel Transzfer", "telephone": "+36203289955" },
     "sameAs": ["https://www.facebook.com/Mandel-Transfer-112481643553395/"]
@@ -46,7 +46,7 @@
     "mainEntity": [
       {"@type":"Question","name":"Honnan vállaltok reptéri transzfert?","acceptedAnswer":{"@type":"Answer","text":"Komárom-Esztergom megye egész területéről, elsősorban Tatabánya és környékéről — egyeztetés szerint máshonnan is."}},
       {"@type":"Question","name":"Mennyibe kerül a reptéri transzfer?","acceptedAnswer":{"@type":"Answer","text":"Tatabányáról Budapest reptérre 34 000 Ft-tól, Bécs (Schwechat) reptérre 59 000 Ft-tól. Minden út egyedi árképzésű — kérjen pontos ajánlatot."}},
-      {"@type":"Question","name":"Melyik repterekre visztek?","acceptedAnswer":{"@type":"Answer","text":"Budapest (Liszt Ferenc) és Bécs (Schwechat) a leggyakoribb, de bármely más reptérre is megyünk."}},
+      {"@type":"Question","name":"Melyik repterekre visztek?","acceptedAnswer":{"@type":"Answer","text":"Budapest (Liszt Ferenc) és Bécs (Schwechat) a leggyakoribb, de Pozsonyba (BTS) és bármely más reptérre is megyünk."}},
       {"@type":"Question","name":"Hány személy utazhat?","acceptedAnswer":{"@type":"Answer","text":"Akár 4 fő autónként, kényelmesen, csomagokkal. Flotta: Kia e-Niro és Škoda Octavia."}},
       {"@type":"Question","name":"Hogyan foglalhatok időpontot?","acceptedAnswer":{"@type":"Answer","text":"Töltse ki az ajánlatkérő űrlapot, vagy hívjon minket telefonon a +36 20 328 9955 számon. Fix, előre egyeztetett időpontban indulunk."}},
       {"@type":"Question","name":"Vállaltok hajnali vagy éjszakai indulást?","acceptedAnswer":{"@type":"Answer","text":"Igen, 0–24-ben elérhetők vagyunk, akár hajnali repülőjáratokhoz is."}}
@@ -81,6 +81,7 @@
     <video class="hero-bg-video" data-bg autoplay muted loop playsinline preload="auto" poster="/assets/img/hero-night.jpg" aria-hidden="true">
       <source data-src="/assets/video/hero-loop.mp4?v=6" type="video/mp4" />
     </video>
+    <canvas id="hero3d" class="hero-3d" aria-hidden="true"></canvas>
     <div class="hero-beams" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="hero-glow" aria-hidden="true"></div>
     <div class="hero-overlay"></div>
@@ -146,7 +147,7 @@
       <article class="card reveal">
         <svg viewBox="0 0 24 24" class="ico"><path d="M2 16l9-3 4-9 2 1-2 7 5-1 2 2-7 3-2 5-2-1 1-4-7 1z"/></svg>
         <h3 data-i18n="s1_t">Reptéri transzfer</h3>
-        <p data-i18n="s1_p">Bécs (Schwechat) és Budapest (Liszt Ferenc) reptérre, fix időpontban.</p>
+        <p data-i18n="s1_p">Bécs (Schwechat), Budapest (Liszt Ferenc), Pozsony (BTS) — és bármely más reptérre, fix időpontban.</p>
       </article>
       <article class="card reveal">
         <svg viewBox="0 0 24 24" class="ico"><path d="M3 13l2-6h14l2 6v6h-3v-2H6v2H3z M6 13h12"/></svg>
@@ -210,10 +211,19 @@
       <h2 class="display reveal" data-i18n="price_title">Fő útvonalak „-tól” árai</h2>
       <p class="lead reveal" data-i18n="price_lead">Tatabányáról, irányár — a pontos árért kérj ajánlatot.</p>
     </div>
+    <div class="routes3d reveal" id="routes3d" aria-hidden="true">
+      <canvas></canvas>
+      <div class="r3d-labels">
+        <span class="r3d-label origin" data-city="origin"><i></i><span data-i18n="r_origin">Tatabánya</span></span>
+        <span class="r3d-label" data-city="bud"><i></i><span data-i18n="r_bud">Budapest · BUD</span></span>
+        <span class="r3d-label" data-city="vie"><i></i><span data-i18n="r_vie">Bécs · VIE</span></span>
+        <span class="r3d-label" data-city="bts"><i></i><span data-i18n="r_bts">Pozsony · BTS</span></span>
+      </div>
+    </div>
     <div class="price-cards">
-      <a class="price reveal" href="#contact"><div class="route" data-i18n="p1_route">→ Budapest reptér</div><div class="from" data-i18n="p1_from">Tatabányáról, irányár</div><div class="amt"><span data-count="34000">34000</span> Ft-tól</div></a>
-      <a class="price reveal" href="#contact"><div class="route" data-i18n="p2_route">→ Bécs reptér (Ausztria)</div><div class="from" data-i18n="p2_from">Tatabányáról, irányár</div><div class="amt"><span data-count="59000">59000</span> Ft-tól</div></a>
-      <a class="price reveal" href="#contact"><div class="route" data-i18n="p3_route">→ Egyedi útvonal</div><div class="from" data-i18n="p3_from">igény szerint</div><div class="amt gold" data-i18n="p3_amt">Ajánlatkérés</div></a>
+      <a class="price reveal" href="#contact" data-route="bud"><div class="route" data-i18n="p1_route">→ Budapest reptér</div><div class="from" data-i18n="p1_from">Tatabányáról, irányár</div><div class="amt"><span data-count="34000">34000</span> Ft-tól</div></a>
+      <a class="price reveal" href="#contact" data-route="vie"><div class="route" data-i18n="p2_route">→ Bécs reptér (Ausztria)</div><div class="from" data-i18n="p2_from">Tatabányáról, irányár</div><div class="amt"><span data-count="59000">59000</span> Ft-tól</div></a>
+      <a class="price reveal" href="#contact" data-route="any"><div class="route" data-i18n="p3_route">→ Egyedi útvonal</div><div class="from" data-i18n="p3_from">igény szerint</div><div class="amt gold" data-i18n="p3_amt">Ajánlatkérés</div></a>
     </div>
     <p class="price-note reveal" data-i18n="price_note">Minden út egyedi árképzésű, rugalmasan az Ön igényeihez.</p>
   </section>
@@ -258,7 +268,7 @@
     <div class="faq-list">
       <details class="faq-item reveal"><summary data-i18n="q1">Honnan vállaltok reptéri transzfert?</summary><div class="faq-a"><p data-i18n="a1">Komárom-Esztergom megye egész területéről, elsősorban Tatabánya és környékéről — egyeztetés szerint máshonnan is.</p></div></details>
       <details class="faq-item reveal"><summary data-i18n="q2">Mennyibe kerül a reptéri transzfer?</summary><div class="faq-a"><p data-i18n="a2">Tatabányáról Budapest reptérre 34 000 Ft-tól, Bécs (Schwechat) reptérre 59 000 Ft-tól. Minden út egyedi árképzésű — kérj pontos ajánlatot.</p></div></details>
-      <details class="faq-item reveal"><summary data-i18n="q3">Melyik repterekre visztek?</summary><div class="faq-a"><p data-i18n="a3">Budapest (Liszt Ferenc) és Bécs (Schwechat) a leggyakoribb, de bármely más reptérre is megyünk.</p></div></details>
+      <details class="faq-item reveal"><summary data-i18n="q3">Melyik repterekre visztek?</summary><div class="faq-a"><p data-i18n="a3">Budapest (Liszt Ferenc) és Bécs (Schwechat) a leggyakoribb, de Pozsonyba (BTS) és bármely más reptérre is megyünk.</p></div></details>
       <details class="faq-item reveal"><summary data-i18n="q4">Hány személy utazhat?</summary><div class="faq-a"><p data-i18n="a4">Akár 4 fő autónként, kényelmesen, csomagokkal. Flotta: Kia e-Niro és Škoda Octavia.</p></div></details>
       <details class="faq-item reveal"><summary data-i18n="q5">Hogyan foglalhatok időpontot?</summary><div class="faq-a"><p data-i18n="a5">Töltsd ki az ajánlatkérő űrlapot, vagy hívj minket telefonon a +36 20 328 9955 számon. Fix, előre egyeztetett időpontban indulunk.</p></div></details>
       <details class="faq-item reveal"><summary data-i18n="q6">Vállaltok hajnali vagy éjszakai indulást?</summary><div class="faq-a"><p data-i18n="a6">Igen, 0–24-ben elérhetők vagyunk, akár hajnali repülőjáratokhoz is.</p></div></details>

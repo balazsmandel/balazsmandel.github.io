@@ -25,10 +25,10 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .btn.ghost{border:1px solid rgba(244,241,234,.3);color:var(--text);background:transparent;}
 .btn.ghost:hover{background:rgba(244,241,234,.08);}
 
-/* reveal — modern blur-in + rise */
-.reveal{opacity:0;transform:translateY(46px);
+/* reveal — rise with a subtle 3D tip-in (perspective baked into the transform) */
+.reveal{opacity:0;transform:perspective(900px) translateY(46px) rotateX(7deg);transform-origin:50% 100%;
   transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);will-change:transform,opacity;}
-.reveal.in{opacity:1;transform:none;}
+.reveal.in{opacity:1;transform:perspective(900px) translateY(0) rotateX(0);}
 
 /* ===== NAV ===== */
 .nav{position:fixed;inset:0 0 auto 0;z-index:100;display:flex;justify-content:space-between;align-items:center;
@@ -150,8 +150,8 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .car-img::before{content:"";position:absolute;inset:-12% -8% 2%;z-index:0;pointer-events:none;
   background:radial-gradient(64% 56% at 50% 42%,rgba(225,232,240,.16),rgba(231,200,132,.07) 38%,transparent 70%);
   filter:blur(8px);}
-.car-img img{position:relative;z-index:1;width:100%;display:block;filter:drop-shadow(0 26px 36px rgba(0,0,0,.55));transition:transform .5s cubic-bezier(.2,.7,.2,1),filter .5s;}
-.car-img:hover img{transform:translateY(-8px) scale(1.04);filter:drop-shadow(0 40px 60px rgba(0,0,0,.6));}
+.car-img img:not(.car-reflect){position:relative;z-index:1;width:100%;display:block;filter:drop-shadow(0 26px 36px rgba(0,0,0,.55));transition:transform .5s cubic-bezier(.2,.7,.2,1),filter .5s;}
+.car-img:hover img:not(.car-reflect){transform:translateY(-8px) scale(1.04);filter:drop-shadow(0 40px 60px rgba(0,0,0,.6));}
 .car-img .img-ph{aspect-ratio:1500/950;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border);border-radius:18px;color:var(--muted);text-align:center;padding:20px;font-size:14px;background:rgba(255,255,255,.02);}
 .car-info h3{font-weight:900;text-transform:uppercase;font-size:clamp(30px,4.6vw,54px);letter-spacing:-.02em;line-height:.95;}
 .car-desc{color:var(--muted);font-size:16px;line-height:1.5;margin:16px 0 18px;max-width:430px;}
@@ -293,6 +293,36 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 /* Reduced-motion / no-JS: video sources use data-src and are never loaded by
    video.js, so the <video poster> image is the static fallback. Intentional —
    do not add display:none here. */
+
+/* ===== 3D layers ===== */
+
+/* hero light-dust canvas — between video (z0) and content (z4); MUST stay
+   free of CSS filters / blend modes (those froze the hero video in Chrome) */
+.hero-3d{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
+
+/* 3D route map (prices section) */
+.routes3d{position:relative;max-width:var(--maxw);margin:0 auto 46px;height:clamp(340px,46vw,520px);}
+.routes3d canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+.routes3d::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 50%,transparent 58%,var(--bg) 96%);}
+.r3d-labels{position:absolute;inset:0;pointer-events:none;}
+.r3d-label{position:absolute;transform:translate(-50%,-130%);display:inline-flex;align-items:center;gap:7px;
+  white-space:nowrap;font-size:12px;letter-spacing:.08em;font-weight:600;color:#dfe4ea;
+  background:rgba(8,11,15,.62);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 12px;
+  backdrop-filter:blur(6px);opacity:0;transition:opacity .4s;z-index:2;}
+.r3d-label i{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px rgba(53,198,208,.8);}
+.r3d-label[data-city="bud"] i{background:var(--gold);box-shadow:0 0 8px rgba(231,200,132,.8);}
+.r3d-label[data-city="bts"] i{background:#d9e2ec;box-shadow:0 0 8px rgba(217,226,236,.8);}
+.r3d-label.origin i{background:var(--gold);box-shadow:0 0 8px rgba(231,200,132,.9);}
+.r3d-label.origin{border-color:rgba(231,200,132,.35);color:var(--gold2);}
+@media (max-width:640px){.routes3d{height:62vw;margin-bottom:30px;}.r3d-label{font-size:10.5px;padding:4px 9px;}}
+
+/* fleet showroom — 3D stage + mirror floor */
+.car-3d{position:relative;transform-style:preserve-3d;will-change:transform;}
+.car-reflect{position:absolute;top:99%;left:0;width:100%;transform:scaleY(-1);pointer-events:none;
+  opacity:.22;filter:blur(6px) brightness(.55) saturate(.8);
+  -webkit-mask-image:linear-gradient(180deg,transparent 38%,rgba(0,0,0,.85) 100%);
+  mask-image:linear-gradient(180deg,transparent 38%,rgba(0,0,0,.85) 100%);}
 
 /* ===== Reduced motion ===== */
 @media (prefers-reduced-motion: reduce){

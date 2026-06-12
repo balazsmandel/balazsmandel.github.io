@@ -68,9 +68,9 @@ document.querySelectorAll('a[href^="tel:"]').forEach((a) =>
 document.querySelectorAll('a[href*="wa.me"]').forEach((a) =>
   a.addEventListener('click', () => window.gtag?.('event', 'whatsapp_click')))
 
-// ---------- service card 3D tilt (desktop pointers only) ----------
+// ---------- card 3D tilt (services + prices, desktop pointers only) ----------
 if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  document.querySelectorAll('.card').forEach((card) => {
+  document.querySelectorAll('.card, .price').forEach((card) => {
     card.addEventListener('mouseenter', () => { card.style.transition = 'transform .1s ease-out, box-shadow .25s, border-color .25s' })
     card.addEventListener('mousemove', (e) => {
       const b = card.getBoundingClientRect()
@@ -105,3 +105,20 @@ initVideos()
 
 // ---------- scroll choreography ----------
 initScroll()
+
+// ---------- 3D layers (lazy: three.js only loads when needed) ----------
+const heroCanvas = document.getElementById('hero3d')
+if (heroCanvas) import('./fx/hero3d.js').then((m) => m.initHero3D(heroCanvas))
+
+const routesEl = document.getElementById('routes3d')
+if (routesEl) {
+  const io = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      io.disconnect()
+      import('./fx/routes3d.js').then((m) => m.initRoutes3D(routesEl))
+    }
+  }, { rootMargin: '600px' })
+  io.observe(routesEl)
+}
+
+import('./fx/fleetfx.js').then((m) => m.initFleetFX())
