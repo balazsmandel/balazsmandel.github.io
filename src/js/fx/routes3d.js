@@ -55,6 +55,8 @@ export function initRoutes3D(root) {
   const mapMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })
   // CARTO dark tiles are nearly black — multiply up the exposure, cool tint
   mapMat.color.setRGB(2.5, 2.7, 2.9)
+  // oval island: the rectangular texture fades out elliptically at the edges
+  mapMat.alphaMap = ovalAlphaTex()
   const mapMesh = new THREE.Mesh(new THREE.PlaneGeometry(MAP_W, MAP_H), mapMat)
   mapMesh.rotation.x = -Math.PI / 2
   mapMesh.position.y = -0.012
@@ -319,6 +321,21 @@ function makeStars() {
 }
 
 /* ---------- tiny canvas textures ---------- */
+
+/** white-centre → black-edge radial alpha (stretched to an ellipse by the
+ *  non-square plane), so the map reads as a soft oval island, not a slab */
+function ovalAlphaTex() {
+  const c = document.createElement('canvas')
+  c.width = c.height = 1024
+  const ctx = c.getContext('2d')
+  const g = ctx.createRadialGradient(512, 512, 0, 512, 512, 512)
+  g.addColorStop(0, '#fff')
+  g.addColorStop(0.52, '#fff')
+  g.addColorStop(0.98, '#000')
+  ctx.fillStyle = g
+  ctx.fillRect(0, 0, 1024, 1024)
+  return new THREE.CanvasTexture(c)
+}
 
 function radialTex(rgba) {
   const c = document.createElement('canvas')

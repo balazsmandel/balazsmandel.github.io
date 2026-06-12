@@ -325,6 +325,20 @@ function initJourney(hero) {
   const plane = svg.querySelector('.hj-plane')
   if (!road || !sky || !trail || !car || !plane) return
 
+  // portrait phones get their own compact geometry (the desktop 1440×810
+  // viewBox with slice-cropping would push the whole story off screen)
+  const MOBILE = window.matchMedia('(max-width: 760px)').matches
+  if (MOBILE) {
+    svg.setAttribute('viewBox', '0 0 412 915')
+    road.setAttribute('d', 'M 30 712 C 90 724, 140 692, 200 674 S 330 652, 370 646')
+    const skyD = 'M 380 632 C 400 540, 360 440, 280 380 S 130 290, 70 210 S 36 150, 20 118'
+    ;[sky, trail, glow].forEach((p) => p && p.setAttribute('d', skyD))
+    svg.querySelector('.hj-house')?.setAttribute('transform', 'translate(26,686) scale(.85)')
+    svg.querySelector('.hj-airport')?.setAttribute('transform', 'translate(386,630) scale(.85)')
+    if (pax) { pax.setAttribute('cx', '32'); pax.setAttribute('cy', '704') }
+    gsap.set(car, { scale: 0.8, transformOrigin: '50% 50%' }) // survives motionPath
+  }
+
   const L = sky.getTotalLength()
   const SEG = 220
   ;[trail, glow].forEach((el) => el && el.setAttribute('stroke-dasharray', `${SEG} ${L + SEG}`))
