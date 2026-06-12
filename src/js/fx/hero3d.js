@@ -312,58 +312,79 @@ function initKineticType(hero) {
 
 /* ====================== journey story ====================== */
 
-/** house → car picks the passenger up → airport → takeoff */
+/** house → car picks the passenger up → airport → takeoff.
+ *  Rebuilds itself whenever the phone/desktop breakpoint flips, so toggling
+ *  device emulation or rotating the phone never strands the desktop layout. */
 function initJourney(hero) {
   const svg = hero.querySelector('.hero-journey')
   if (!svg) return
-  const road = svg.querySelector('.hj-road')
-  const sky = svg.querySelector('.hj-sky')
-  const trail = svg.querySelector('.hj-trail')
-  const glow = svg.querySelector('.hj-trailglow')
-  const car = svg.querySelector('.hj-car')
-  const pax = svg.querySelector('.hj-pax')
-  const plane = svg.querySelector('.hj-plane')
+  const q = (s) => svg.querySelector(s)
+  const road = q('.hj-road'), sky = q('.hj-sky'), trail = q('.hj-trail'), glow = q('.hj-trailglow')
+  const car = q('.hj-car'), pax = q('.hj-pax'), plane = q('.hj-plane')
+  const house = q('.hj-house'), airport = q('.hj-airport')
   if (!road || !sky || !trail || !car || !plane) return
 
-  // portrait phones get their own compact geometry (the desktop 1440×810
-  // viewBox with slice-cropping would push the whole story off screen)
-  const MOBILE = window.matchMedia('(max-width: 760px)').matches
-  if (MOBILE) {
-    svg.setAttribute('viewBox', '0 0 412 915')
-    road.setAttribute('d', 'M 30 712 C 90 724, 140 692, 200 674 S 330 652, 370 646')
-    const skyD = 'M 380 632 C 400 540, 360 440, 280 380 S 130 290, 70 210 S 36 150, 20 118'
-    ;[sky, trail, glow].forEach((p) => p && p.setAttribute('d', skyD))
-    svg.querySelector('.hj-house')?.setAttribute('transform', 'translate(26,686) scale(.85)')
-    svg.querySelector('.hj-airport')?.setAttribute('transform', 'translate(386,630) scale(.85)')
-    if (pax) { pax.setAttribute('cx', '32'); pax.setAttribute('cy', '704') }
-    gsap.set(car, { scale: 0.8, transformOrigin: '50% 50%' }) // survives motionPath
+  // desktop geometry comes from the markup; phones get a portrait layout
+  const DESKTOP = {
+    viewBox: svg.getAttribute('viewBox'),
+    road: road.getAttribute('d'),
+    sky: sky.getAttribute('d'),
+    house: house?.getAttribute('transform'),
+    airport: airport?.getAttribute('transform'),
+    pax: [pax?.getAttribute('cx'), pax?.getAttribute('cy')],
+    carScale: 1,
   }
+  const PHONE = {
+    viewBox: '0 0 412 915',
+    road: 'M 30 700 C 90 712, 140 682, 200 664 S 330 642, 370 636',
+    sky: 'M 380 622 C 400 530, 360 434, 280 376 S 130 288, 70 208 S 36 148, 20 116',
+    house: 'translate(26,674) scale(.85)',
+    airport: 'translate(386,620) scale(.85)',
+    pax: ['32', '692'],
+    carScale: 0.8,
+  }
+  const mq = window.matchMedia('(max-width: 760px)')
+  let tl = null
 
-  const L = sky.getTotalLength()
-  const SEG = 220
-  ;[trail, glow].forEach((el) => el && el.setAttribute('stroke-dasharray', `${SEG} ${L + SEG}`))
+  function build() {
+    tl?.kill()
+    const C = mq.matches ? PHONE : DESKTOP
+    svg.setAttribute('viewBox', C.viewBox)
+    road.setAttribute('d', C.road)
+    ;[sky, trail, glow].forEach((p) => p && p.setAttribute('d', C.sky))
+    if (house && C.house) house.setAttribute('transform', C.house)
+    if (airport && C.airport) airport.setAttribute('transform', C.airport)
+    if (pax) { pax.setAttribute('cx', C.pax[0]); pax.setAttribute('cy', C.pax[1]) }
+    gsap.set(car, { scale: C.carScale, transformOrigin: '50% 50%' }) // survives motionPath
 
-  const carPath = { path: road, align: road, alignOrigin: [0.5, 0.82], autoRotate: true }
+    const L = sky.getTotalLength()
+    const SEG = 220
+    ;[trail, glow].forEach((el) => el && el.setAttribute('stroke-dasharray', `${SEG} ${L + SEG}`))
 
-  const tl = gsap.timeline({ repeat: -1, repeatDelay: 2.4, delay: 1.0 })
-  tl.set(car, { motionPath: { ...carPath, start: 0, end: 0.0001 }, opacity: 0 }, 0)
-  tl.set([trail, glow, plane].filter(Boolean), { opacity: 0 }, 0)
-  tl.set(pax, { opacity: 0, x: 0 }, 0)
-  tl.to(car, { opacity: 1, duration: 0.5 }, 0.2)
-  tl.to(pax, { opacity: 1, duration: 0.3 }, 0.4)
-  tl.to(pax, { x: 26, duration: 0.9, ease: 'power1.inOut' }, 0.8)
-  tl.to(pax, { opacity: 0, duration: 0.25 }, 1.6)
-  tl.to(car, { motionPath: carPath, duration: 5.6, ease: 'power1.inOut' }, 2.0)
-  tl.to(car, { opacity: 0, duration: 0.5 }, 7.9)
-  tl.set([trail, glow, plane].filter(Boolean), { opacity: 1 }, 8.2)
-  tl.fromTo([trail, glow].filter(Boolean),
-    { strokeDashoffset: SEG },
-    { strokeDashoffset: SEG - L, duration: 6.4, ease: 'none' }, 8.2)
-  tl.to(plane, {
-    motionPath: { path: sky, align: sky, alignOrigin: [0.5, 0.5], autoRotate: true },
-    duration: 6.4, ease: 'none',
-  }, 8.2)
-  tl.to([trail, glow, plane].filter(Boolean), { opacity: 0, duration: 0.9 }, 13.8)
+    const carPath = { path: road, align: road, alignOrigin: [0.5, 0.82], autoRotate: true }
 
-  new IntersectionObserver(([e]) => { e.isIntersecting ? tl.play() : tl.pause() }).observe(hero)
+    tl = gsap.timeline({ repeat: -1, repeatDelay: 2.4, delay: 1.0 })
+    tl.set(car, { motionPath: { ...carPath, start: 0, end: 0.0001 }, opacity: 0 }, 0)
+    tl.set([trail, glow, plane].filter(Boolean), { opacity: 0 }, 0)
+    tl.set(pax, { opacity: 0, x: 0 }, 0)
+    tl.to(car, { opacity: 1, duration: 0.5 }, 0.2)
+    tl.to(pax, { opacity: 1, duration: 0.3 }, 0.4)
+    tl.to(pax, { x: 26, duration: 0.9, ease: 'power1.inOut' }, 0.8)
+    tl.to(pax, { opacity: 0, duration: 0.25 }, 1.6)
+    tl.to(car, { motionPath: carPath, duration: 5.6, ease: 'power1.inOut' }, 2.0)
+    tl.to(car, { opacity: 0, duration: 0.5 }, 7.9)
+    tl.set([trail, glow, plane].filter(Boolean), { opacity: 1 }, 8.2)
+    tl.fromTo([trail, glow].filter(Boolean),
+      { strokeDashoffset: SEG },
+      { strokeDashoffset: SEG - L, duration: 6.4, ease: 'none' }, 8.2)
+    tl.to(plane, {
+      motionPath: { path: sky, align: sky, alignOrigin: [0.5, 0.5], autoRotate: true },
+      duration: 6.4, ease: 'none',
+    }, 8.2)
+    tl.to([trail, glow, plane].filter(Boolean), { opacity: 0, duration: 0.9 }, 13.8)
+  }
+  build()
+  mq.addEventListener('change', build)
+
+  new IntersectionObserver(([e]) => { if (tl) { e.isIntersecting ? tl.play() : tl.pause() } }).observe(hero)
 }

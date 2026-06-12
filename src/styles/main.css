@@ -74,7 +74,9 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .burger{display:none;background:none;border:none;color:var(--text);font-size:24px;cursor:pointer;}
 
 /* ===== HERO — night showroom (no video: art-directed layers + light sweep) ===== */
-.hero{position:relative;height:100vh;min-height:620px;overflow:hidden;display:flex;align-items:center;background:#05070b;}
+/* 100svh: on real phones 100vh includes the collapsed URL bar, which pushed
+   the bottom-anchored car below the first screen */
+.hero{position:relative;height:100vh;height:100svh;min-height:560px;overflow:hidden;display:flex;align-items:center;background:#05070b;}
 .hero-bg2{position:absolute;inset:0;z-index:0;
   background:
     radial-gradient(75% 55% at 72% 26%,rgba(24,42,60,.6),transparent 62%),
@@ -106,9 +108,9 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
   mask-image:linear-gradient(180deg,#000 76%,rgba(0,0,0,.55) 88%,transparent 99%);}
 .hc2-reflect{display:none;}
 @media(max-width:860px){
-  /* mobile: car parks centered at the very bottom, content rides above it */
-  .hero-car2{left:50%;right:auto;margin-left:-44vw;width:88vw;bottom:0;}
-  .hero .hero-content{padding-bottom:24vh;}
+  /* mobile: car parks centered just above the bottom edge, content above it */
+  .hero-car2{left:50%;right:auto;margin-left:-40vw;width:80vw;bottom:2vh;}
+  .hero .hero-content{padding-bottom:20vh;}
 }
 
 /* kinetic type: the canvas paints the headline (letters = windows into the
