@@ -1,5 +1,6 @@
 // One-off visual verification for the 3D modernization (feat/3d-modern).
-// Screenshots hero / routes / fleet and re-runs the hero-video freeze check.
+// Screenshots hero / journey / warp / routes / fleet and re-runs the
+// hero-video freeze check.
 import puppeteer from "puppeteer-core";
 
 const CHROME = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
@@ -22,24 +23,22 @@ await new Promise((r) => setTimeout(r, 2500));
 
 const t1 = await page.evaluate(() => document.querySelector(".hero-bg-video")?.currentTime ?? null);
 await page.screenshot({ path: `${OUT}/3d-hero.png` });
-await new Promise((r) => setTimeout(r, 2000));
-const t2 = await page.evaluate(() => document.querySelector(".hero-bg-video")?.currentTime ?? null);
-
-// routes section
-await page.evaluate(() => document.getElementById("routes3d")?.scrollIntoView({ block: "center" }));
+// catch the journey mid-drive and the takeoff
 await new Promise((r) => setTimeout(r, 3000));
-await page.screenshot({ path: `${OUT}/3d-routes.png` });
+await page.screenshot({ path: `${OUT}/3d-hero-drive.png` });
+const t2 = await page.evaluate(() => document.querySelector(".hero-bg-video")?.currentTime ?? null);
+await new Promise((r) => setTimeout(r, 5500));
+await page.screenshot({ path: `${OUT}/3d-hero-takeoff.png` });
 
-// hover the Vienna price card to check route highlight
-await page.evaluate(() => document.querySelector('[data-route="vie"]')?.scrollIntoView({ block: "end" }));
-await new Promise((r) => setTimeout(r, 800));
-const card = await page.$('[data-route="vie"]');
-if (card) {
-  const b = await card.boundingBox();
-  if (b) await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2);
-}
-await new Promise((r) => setTimeout(r, 1500));
-await page.screenshot({ path: `${OUT}/3d-routes-hover.png` });
+// warp divider
+await page.evaluate(() => document.getElementById("about")?.scrollIntoView({ block: "center" }));
+await new Promise((r) => setTimeout(r, 2000));
+await page.screenshot({ path: `${OUT}/3d-warp.png` });
+
+// routes section (real map)
+await page.evaluate(() => document.getElementById("routes3d")?.scrollIntoView({ block: "center" }));
+await new Promise((r) => setTimeout(r, 3500));
+await page.screenshot({ path: `${OUT}/3d-routes.png` });
 
 // fleet reflections
 await page.evaluate(() => document.getElementById("fleet")?.scrollIntoView({ block: "start" }));

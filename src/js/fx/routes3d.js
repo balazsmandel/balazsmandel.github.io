@@ -4,6 +4,7 @@
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import MAP from './map-bounds.json'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -11,13 +12,23 @@ const GOLD = 0xe7c884
 const TEAL = 0x35c6d0
 const INK = 0x07090c
 
-// hand-tuned composition (roughly geographic: Vienna west/far, Bratislava
-// north-west between the two, Budapest east)
+// ground plane sized to the baked night-map (web mercator, see bake-map.mjs)
+const MAP_W = 15
+const MAP_H = MAP_W * (MAP.px.h / MAP.px.w)
+const mercY = (lat) => Math.log(Math.tan(Math.PI / 4 + (lat * Math.PI) / 360))
+/** real lon/lat → scene coords on the map plane */
+function project(lon, lat) {
+  const u = (lon - MAP.lonW) / (MAP.lonE - MAP.lonW)
+  const v = (mercY(MAP.latN) - mercY(lat)) / (mercY(MAP.latN) - mercY(MAP.latS))
+  return new THREE.Vector3((u - 0.5) * MAP_W, 0, (v - 0.5) * MAP_H)
+}
+
+// real geographic positions
 const CITIES = {
-  origin: new THREE.Vector3(0.2, 0, 1.6),
-  bud: new THREE.Vector3(3.0, 0, -0.7),
-  vie: new THREE.Vector3(-3.4, 0, -1.6),
-  bts: new THREE.Vector3(-1.7, 0, -2.5),
+  origin: project(18.4048, 47.5692), // Tatabánya
+  bud: project(19.2611, 47.4369),    // Budapest Liszt Ferenc
+  vie: project(16.5697, 48.1103),    // Wien Schwechat
+  bts: project(17.2127, 48.1702),    // Bratislava
 }
 
 export function initRoutes3D(root) {
@@ -34,14 +45,32 @@ export function initRoutes3D(root) {
 
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 80)
 
-  // --- ground: subtle grid + warm pool of light under the origin ---
+  // --- ground: real night map of the region (baked from CARTO dark tiles),
+  // with a faint grid that doubles as fallback while/if the texture loads ---
   const grid = new THREE.GridHelper(46, 46, 0x1b2733, 0x121a22)
   grid.material.transparent = true
   grid.material.opacity = 0.55
   scene.add(grid)
 
+  const mapMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false })
+  // CARTO dark tiles are nearly black — multiply up the exposure, cool tint
+  mapMat.color.setRGB(2.5, 2.7, 2.9)
+  const mapMesh = new THREE.Mesh(new THREE.PlaneGeometry(MAP_W, MAP_H), mapMat)
+  mapMesh.rotation.x = -Math.PI / 2
+  mapMesh.position.y = -0.012
+  mapMesh.renderOrder = -1
+  scene.add(mapMesh)
+  new THREE.TextureLoader().load('/assets/img/map-night.png', (tex) => {
+    tex.colorSpace = THREE.SRGBColorSpace
+    tex.anisotropy = renderer.capabilities.getMaxAnisotropy()
+    mapMat.map = tex
+    mapMat.needsUpdate = true
+    gsap.to(mapMat, { opacity: 0.95, duration: 1.2, ease: 'power1.out' })
+    gsap.to(grid.material, { opacity: 0.1, duration: 1.2 })
+  })
+
   const pool = new THREE.Mesh(
-    new THREE.CircleGeometry(5.4, 48),
+    new THREE.CircleGeometry(3.2, 48),
     new THREE.MeshBasicMaterial({ map: radialTex('rgba(231,200,132,.20)'), transparent: true, depthWrite: false })
   )
   pool.rotation.x = -Math.PI / 2
@@ -64,9 +93,9 @@ export function initRoutes3D(root) {
 
   // --- routes: arc tube + travelling light pulses ---
   const routes = {
-    bud: makeRoute(CITIES.origin, CITIES.bud, 0.95, GOLD),
-    vie: makeRoute(CITIES.origin, CITIES.vie, 1.35, TEAL),
-    bts: makeRoute(CITIES.origin, CITIES.bts, 1.15, 0xd9e2ec),
+    bud: makeRoute(CITIES.origin, CITIES.bud, 0.6, GOLD),
+    vie: makeRoute(CITIES.origin, CITIES.vie, 1.05, TEAL),
+    bts: makeRoute(CITIES.origin, CITIES.bts, 0.85, 0xd9e2ec),
   }
   Object.values(routes).forEach((r) => scene.add(r.group))
 
@@ -89,8 +118,8 @@ export function initRoutes3D(root) {
   // --- camera: scroll dolly + mouse parallax ---
   const pose = { dolly: reduced ? 1 : 0, mx: 0, my: 0 }
   let tx = 0, ty = 0
-  const FROM = { pos: new THREE.Vector3(0, 7.4, 11.5), look: new THREE.Vector3(0, 0, -0.6) }
-  const TO = { pos: new THREE.Vector3(0, 4.1, 7.3), look: new THREE.Vector3(0, 0.35, -0.5) }
+  const FROM = { pos: new THREE.Vector3(-0.6, 6.0, 9.2), look: new THREE.Vector3(-0.6, 0, -0.5) }
+  const TO = { pos: new THREE.Vector3(-0.6, 3.2, 5.5), look: new THREE.Vector3(-0.6, 0.3, -0.4) }
   function applyCamera() {
     const d = pose.dolly
     camera.position.lerpVectors(FROM.pos, TO.pos, d)
@@ -218,7 +247,7 @@ function makeRadar(origin) {
       const amp = hot ? 0.5 : 0.16
       for (const { m, off } of rings) {
         const p = ((t * speed) + off) % 1
-        m.scale.setScalar(0.2 + p * 3.4)
+        m.scale.setScalar(0.15 + p * 2.1)
         m.material.opacity = (1 - p) * amp
       }
     },

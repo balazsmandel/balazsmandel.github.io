@@ -34,8 +34,15 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .nav{position:fixed;inset:0 0 auto 0;z-index:100;display:flex;justify-content:space-between;align-items:center;
   padding:20px clamp(20px,5vw,48px);transition:background .4s,padding .4s,border-color .4s;border-bottom:1px solid transparent;}
 .nav.scrolled{background:rgba(8,11,15,.85);backdrop-filter:blur(14px);padding:12px clamp(20px,5vw,48px);border-color:rgba(255,255,255,.06);}
-.brand{font-family:"Archivo";font-weight:900;font-size:20px;letter-spacing:1px;text-decoration:none;display:inline-flex;align-items:baseline;}
+.brand{font-family:"Archivo";font-weight:900;font-size:20px;letter-spacing:1px;text-decoration:none;display:inline-flex;align-items:baseline;
+  background:linear-gradient(100deg,#f4f1ea 42%,var(--gold2) 50%,#f4f1ea 58%);background-size:260% 100%;background-position:0% 0;
+  -webkit-background-clip:text;background-clip:text;color:transparent;transition:background-position 1s ease;}
+.brand:hover{background-position:-160% 0;}
 .brand .dot{color:var(--gold);}
+.brand .brand-plane{width:15px;height:15px;fill:var(--gold);margin-left:3px;align-self:center;flex:none;
+  animation:planeBob 3.2s ease-in-out infinite;transition:transform .55s cubic-bezier(.34,1.56,.64,1);}
+.brand:hover .brand-plane{transform:translate(6px,-7px) rotate(12deg) scale(1.18);}
+@keyframes planeBob{0%,100%{translate:0 0;}50%{translate:0 -2.5px;}}
 .brand small{font-family:"Inter";font-weight:500;font-size:10px;letter-spacing:4px;color:var(--muted);margin-left:8px;text-transform:uppercase;}
 .navlinks{display:flex;align-items:center;gap:28px;}
 .navlinks>a:not(.cta){color:var(--text);opacity:.82;text-decoration:none;font-size:14px;font-weight:500;transition:opacity .2s;}
@@ -299,6 +306,35 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 /* hero light-dust canvas — between video (z0) and content (z4); MUST stay
    free of CSS filters / blend modes (those froze the hero video in Chrome) */
 .hero-3d{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
+.hero-bg-video{will-change:transform;}
+.hero-content{transform-style:preserve-3d;will-change:transform,opacity;}
+.hero h1{transform:translateZ(46px);}
+
+/* hero journey story — drawn line-art: house → car → airport → takeoff */
+.hero-journey{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
+.hero-journey .hj-road{stroke:rgba(231,200,132,.3);stroke-width:1.6;
+  stroke-dasharray:1.5 8;stroke-linecap:round;fill:none;}
+/* the sky path only guides the plane/contrail — keep it invisible to avoid clutter */
+.hero-journey .hj-sky{stroke:none;fill:none;}
+.hero-journey .hj-trailglow{stroke:rgba(231,200,132,.26);stroke-width:6;stroke-linecap:round;fill:none;opacity:0;}
+.hero-journey .hj-trail{stroke:#f0d79b;stroke-width:2;stroke-linecap:round;fill:none;opacity:0;}
+.hero-journey .hj-house path,.hero-journey .hj-airport path{stroke:rgba(231,200,132,.9);stroke-width:1.8;
+  fill:none;stroke-linejoin:round;stroke-linecap:round;}
+.hero-journey .hj-beacon{fill:#ff8e6e;animation:beacon 1.6s ease-in-out infinite;}
+@keyframes beacon{0%,100%{opacity:.25;}50%{opacity:1;}}
+.hero-journey .hj-pax{fill:#f0d79b;opacity:0;}
+.hero-journey .hj-car .hj-body,.hero-journey .hj-car .hj-win{stroke:#f0d79b;stroke-width:2;fill:rgba(8,11,15,.35);
+  stroke-linejoin:round;stroke-linecap:round;}
+.hero-journey .hj-car .hj-wheel{stroke:#f0d79b;stroke-width:2;fill:rgba(8,11,15,.55);}
+.hero-journey .hj-car .hj-hub{fill:#e7c884;}
+.hero-journey .hj-car .hj-beam{fill:rgba(255,244,214,.12);}
+.hero-journey .hj-plane-body{fill:#f0d79b;}
+.hero-journey .hj-plane-glow{fill:rgba(231,200,132,.55);}
+.hero-journey .hj-plane-halo{fill:rgba(231,200,132,.16);}
+@media(max-width:760px){.hero-journey{display:none;}}
+
+/* warp streaks behind the "30 years" divider */
+.warp-canvas{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
 
 /* 3D route map (prices section) */
 .routes3d{position:relative;max-width:var(--maxw);margin:0 auto 46px;height:clamp(340px,46vw,520px);}
@@ -317,6 +353,28 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
 .r3d-label.origin{border-color:rgba(231,200,132,.35);color:var(--gold2);}
 @media (max-width:640px){.routes3d{height:62vw;margin-bottom:30px;}.r3d-label{font-size:10.5px;padding:4px 9px;}}
 
+/* rotating gold border sheen (services cards on hover, quote form always) */
+@property --ang{syntax:'<angle>';initial-value:0deg;inherits:false;}
+@keyframes borderSpin{to{--ang:360deg;}}
+.card{position:relative;}
+.card::before{content:"";position:absolute;inset:-1px;border-radius:21px;padding:1px;pointer-events:none;
+  background:conic-gradient(from var(--ang),transparent 0deg 252deg,rgba(231,200,132,.85) 306deg,transparent 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:borderSpin 5s linear infinite;opacity:0;transition:opacity .45s;}
+.card:hover::before{opacity:1;}
+.card .ico{transform:translateZ(34px);}
+.card h3{transform:translateZ(22px);}
+.quote-form{position:relative;}
+.quote-form::before{content:"";position:absolute;inset:-1px;border-radius:25px;padding:1px;pointer-events:none;
+  background:conic-gradient(from var(--ang),transparent 0deg,rgba(231,200,132,.55) 40deg,transparent 95deg 180deg,rgba(26,166,176,.45) 225deg,transparent 280deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:borderSpin 10s linear infinite;}
+
+/* map attribution (CARTO/OSM tiles baked into the 3D route map) */
+.r3d-attrib{position:absolute;right:8px;bottom:4px;font-size:10px;color:rgba(154,163,173,.55);letter-spacing:.02em;}
+
 /* fleet showroom — 3D stage + mirror floor */
 .car-3d{position:relative;transform-style:preserve-3d;will-change:transform;}
 .car-reflect{position:absolute;top:99%;left:0;width:100%;transform:scaleY(-1);pointer-events:none;
@@ -331,4 +389,6 @@ section{padding:clamp(70px,11vw,140px) clamp(20px,5vw,48px);}
   .hero h1 .ln>span{transform:none!important;animation:none!important;}
   .scrollcue .line{animation:none!important;}
   .hero-beams span,.dot-live,.hero h1 .gold.shimmer{animation:none!important;}
+  .hero-journey{display:none!important;}
+  .card::before,.quote-form::before,.brand .brand-plane,.hj-beacon{animation:none!important;}
 }

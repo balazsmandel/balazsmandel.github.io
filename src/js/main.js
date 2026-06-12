@@ -121,4 +121,15 @@ if (routesEl) {
   io.observe(routesEl)
 }
 
+const warpCanvas = document.getElementById('warp')
+if (warpCanvas) {
+  const io = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      io.disconnect()
+      import('./fx/warp.js').then((m) => m.initWarp(warpCanvas))
+    }
+  }, { rootMargin: '600px' })
+  io.observe(warpCanvas)
+}
+
 import('./fx/fleetfx.js').then((m) => m.initFleetFX())
